@@ -2,6 +2,7 @@ const SITE_TITLE = 'Shope';
 const User = require('../../models/user');
 const Enrollement = require('../../models/enrollment');
 const Course = require('../../models/course');
+
 module.exports.index = async (req, res) => {
     const enrollements = await Enrollement.find();
     if (req.session.login) {
@@ -20,12 +21,14 @@ module.exports.index = async (req, res) => {
         });
     }
 }
+
 module.exports.create = async (req, res) => {
     res.render('admin/enrollmentCreate', {
         req: req,
         messages: req.flash(),
     });
 }
+
 module.exports.doCreate = async (req, res) => {
     const course = await Course.findById(req.body.courseId);
     const existingEnrollment = await Enrollement.findOne({

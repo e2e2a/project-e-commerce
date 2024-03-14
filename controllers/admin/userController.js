@@ -19,12 +19,14 @@ module.exports.index = async (req, res) => {
         });
     }
 }
+
 module.exports.create = async (req, res) => {
     res.render('admin/userCreate', {
         req: req,
         messages: req.flash(),
     });
 }
+
 module.exports.doCreate = async (req, res) => {
     const email = req.body.email;
     const existingUser = await User.findOne({ email: email });

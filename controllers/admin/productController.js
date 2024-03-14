@@ -2,6 +2,7 @@ const SITE_TITLE = 'Shope';
 const multer = require('multer');
 const Product = require('../../models/product');
 var fileUpload = require('../../middlewares/product-upload-middleware');
+
 module.exports.index = async (req, res) => {
     const products = await Product.find();
     if (req.session.login) {
@@ -20,6 +21,7 @@ module.exports.index = async (req, res) => {
         });
     }
 }
+
 module.exports.details = (request, response) => {
     if (request.session.userId) {
         response.redirect('product-details', {
@@ -35,12 +37,14 @@ module.exports.details = (request, response) => {
         });
     }
 };
+
 module.exports.create = (req, res) => {
     res.render('admin/productCreate', {
         req: req,
         messages: req.flash(),
     })
 };
+
 module.exports.doCreate = (request, response) => {
     var upload = multer({
         storage: fileUpload.files.storage(),
@@ -78,6 +82,7 @@ module.exports.doCreate = (request, response) => {
         }
     });
 }
+
 module.exports.update = async (request, response) => {
     const productId = request.params.productId
     if (request.session.userId) {
