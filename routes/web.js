@@ -1,0 +1,44 @@
+const adminProductController = require('../controllers/admin/productController');
+const adminCourseController = require('../controllers/admin/courseController');
+const adminUserController = require('../controllers/admin/userController');
+
+const userProductController = require('../controllers/user/productController');
+const userCourseController = require('../controllers/user/courseController');
+
+
+const authLoginController = require('../controllers/auth/loginController');
+module.exports = function(app){
+    app.get('/', (req,res) => {
+        res.render('index',{
+            req:req,
+        })
+    })
+    app.get('/login', authLoginController.login);
+    app.post('/doLogin', authLoginController.doLogin);
+    
+    //products
+    app.get('/products', userProductController.index);
+    app.get('/products/:category', userProductController.indexCategory);
+    app.get('/product/detail/:id', userProductController.detail);
+    //courses
+    app.get('/courses', userCourseController.index);
+    app.get('/course/enroll/:courseId', userCourseController.enroll);
+    app.post('/course/doEnroll', userCourseController.doEnroll);
+
+    
+    //admin
+    app.get('/admin', (req,res) => {
+        res.render('admin/index',{
+            req:req
+        })
+    })
+    app.get('/admin/product', adminProductController.index);
+    app.get('/admin/product/create', adminProductController.create);
+    app.post('/admin/product/doCreate', adminProductController.doCreate);
+    app.get('/admin/course', adminCourseController.index);
+    app.get('/admin/course/create', adminCourseController.create);
+    app.post('/admin/course/doCreate', adminCourseController.doCreate);
+    app.get('/admin/user', adminUserController.index);
+    app.get('/admin/user/create', adminUserController.create);
+    app.post('/admin/user/doCreate', adminUserController.doCreate);
+}

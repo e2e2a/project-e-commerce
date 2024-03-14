@@ -1,0 +1,76 @@
+<%- include('./partials/header/header.ejs'); %>
+<body class="animsition">
+    <div class="page-wrapper">
+        <%- include('./partials/navigation/mobile-nav.ejs'); %>
+        <%- include('./partials/navigation/nav.ejs'); %>
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <%- include('./partials/sidebar/sidebar.ejs'); %>
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>Create Course</strong>
+                                        <small></small>
+                                    </div>
+                                    <div class="card-body card-block">
+                                        <form action="/admin/user/doCreate" method="post" >
+                                            <div class="form-group">
+                                                <label for="fullname" class=" form-control-label">Fullname</label>
+                                                <input type="text" id="fullname" name="fullname" placeholder="Enter Fullname" class="form-control" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email" class=" form-control-label">Email</label>
+                                                <input type="email" id="email" name="email" placeholder="Enter Email" class="form-control" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="address" class=" form-control-label">Address</label>
+                                                <input type="text" id="address" name="address" placeholder="Enter Address" class="form-control" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="age" class=" form-control-label">Age</label>
+                                                <input type="text" id="age" name="age" pattern="^[0-9]{1,10}$" placeholder="Enter Age" class="form-control" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="role" class=" form-control-label">Role</label>
+                                                <select name="role" id="role" class="form-control" required>
+                                                    <option value="" selected hidden>Please select</option>
+                                                    <option value="user">User</option>
+                                                    <option value="admin">Admin</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password" class=" form-control-label">Password</label>
+                                                <input type="password" id="password" name="password" placeholder="Enter Password" class="form-control" autocomplete="off" required/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="confirmPassword" class=" form-control-label">Confirm Password</label>
+                                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" class="form-control" autocomplete="off" required/>
+                                            </div>
+                                            <div class="d-flex justify-content-end m-t-20">
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fa fa-dot-circle-o"></i> Submit
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <%- include('./partials/footer/copyright.ejs'); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+<%- include('./partials/footer/footer_js.ejs') %>

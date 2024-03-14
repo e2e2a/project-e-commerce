@@ -1,0 +1,66 @@
+var mongoose = require("mongoose");
+
+
+var schema = mongoose.Schema({
+    userId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', 
+    },
+    courseId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Course', 
+    },
+    courseTitle:{
+        type: String,
+    },
+    name: {
+        type: String,
+    },
+    address: {
+        type: String,
+    },
+    age: {
+        type: String,
+    },
+    contact: {
+        type: String,
+    },
+    fatherName: {
+        type: String,
+    },
+    motherName: {
+        type: String,
+    },
+    level: {
+        type: String,
+    },
+    schedule: {
+        type: [String],
+        default: []
+    },
+    time: {
+        type: String,
+    },
+    time: {
+        type: String,
+    },
+    dateEnrolling: {
+        type: String,
+    },
+    dateEnrolled: {
+        type: String,
+    },
+    isApproved: {
+        type: String,
+    },
+    contract: {
+        type: String,
+    },
+}, {
+    versionKey: false,
+    timestamps: true
+}
+); 
+schema.set('toJSON', { getters: true });
+
+module.exports = mongoose.model('Enrollment', schema, 'Enrollment');
