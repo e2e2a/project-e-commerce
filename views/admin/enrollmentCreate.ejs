@@ -1,0 +1,101 @@
+<%- include('./partials/header/header.ejs'); %>
+<body class="animsition">
+    <div class="page-wrapper">
+        <%- include('./partials/navigation/mobile-nav.ejs'); %>
+        <%- include('./partials/navigation/nav.ejs'); %>
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <%- include('./partials/sidebar/sidebar.ejs'); %>
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>Create Course</strong>
+                                        <small></small>
+                                    </div>
+                                    <div class="card-body card-block">
+                                        <form action="" method="post">
+                                            <input type="hidden" name="courseId" value="<%= course._id %>">
+                                              <div class="form-group">
+                                                  <label for="name" class=" form-control-label">FullName</label>
+                                                  <input type="text" id="name" name="name" placeholder="Enter FullName" class="form-control" autocomplete="off" value="<%= userLogin.fullname %>" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="address" class=" form-control-label">Address</label>
+                                                  <input type="text" id="address" name="address" placeholder="Enter Address" class="form-control" autocomplete="off" value="<%= userLogin.address %>" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="age" class=" form-control-label">Age</label>
+                                                  <input type="text" id="age" name="age" pattern="^[0-9]{1,10}$" placeholder="Enter age" class="form-control" value="<%= userLogin.age %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="gender" class="form-control-label">Gender</label>
+                                                  <input type="text" id="gender" name="gender" placeholder="Gender" class="form-control" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="contact" class=" form-control-label">Phone Number</label>
+                                                  <input type="text" id="contact" name="contact" pattern="(\+639\d{2}-\d{3}-\d{4}|\+639\d{9}|09\d{2}-\d{3}-\d{4}|09\d{9})" placeholder="Enter Phone Number" class="form-control" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="fatherName" class="form-control-label">Father's Name</label>
+                                                  <input type="text" id="fatherName" name="fatherName" placeholder="Enter Father's Name" class="form-control" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="motherName" class="form-control-label">Mother's Name</label>
+                                                  <input type="text" id="motherName" name="motherName" placeholder="Enter Mother's Name" class="form-control" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group flex-column">
+                                                  <label for="level" class="form-control-label">Level Experience</label>
+                                                  <select name="level" id="level" class="form-control">
+                                                      <option value="" selected hidden>Please select</option>
+                                                      <option value="Beginner">Beginner</option>
+                                                      <option value="Intermediate">Intermediate</option>
+                                                      <option value="Pro">Pro</option>
+                                                  </select>
+                                              </div>
+                                              <div class="form-group flex-column">
+                                                  <label for="schedule" class="form-control-label">Choose Schedule</label>
+                                                  <div id="schedule">
+                                                      <input type="checkbox" id="monday" name="schedule" value="Monday">
+                                                      <label for="monday">Monday</label><br>
+                                                      <input type="checkbox" id="tuesday" name="schedule" value="Tuesday">
+                                                      <label for="tuesday">Tuesday</label><br>
+                                                      <input type="checkbox" id="wednesday" name="schedule" value="Wednesday">
+                                                      <label for="wednesday">Wednesday</label><br>
+                                                      <input type="checkbox" id="thursday" name="schedule" value="Thursday">
+                                                      <label for="thursday">Thursday</label><br>
+                                                      <input type="checkbox" id="friday" name="schedule" value="Friday">
+                                                      <label for="friday">Friday</label><br>
+                                                  </div>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="time" class=" form-control-label">Choose Time</label>
+                                                  <input type="time" id="time" name="time" placeholder="Enter Color" class="form-control" autocomplete="off" required/>
+                                              </div>
+                                              <div class="d-flex justify-content-end m-t-20">
+                                                  <button type="submit" class="btn btn-success">
+                                                      <i class="fa fa-dot-circle-o"></i> Submit
+                                                  </button>
+                                              </div>
+                                          </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <%- include('./partials/footer/copyright.ejs'); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+<%- include('./partials/footer/footer_js.ejs') %>

@@ -7,19 +7,22 @@ module.exports.index = async (req, res) => {
         res.render('admin/userView', {
             site_title: SITE_TITLE,
             title: 'User',
-            users: users
+            users: users,
+            messages: req.flash(),
         });
     } else {
         res.render('admin/userView', {
             site_title: SITE_TITLE,
             title: 'User',
-            users: users
+            users: users,
+            messages: req.flash(),
         });
     }
 }
 module.exports.create = async (req, res) => {
     res.render('admin/userCreate', {
         req: req,
+        messages: req.flash(),
     });
 }
 module.exports.doCreate = async (req, res) => {

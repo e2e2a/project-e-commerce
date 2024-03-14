@@ -8,13 +8,15 @@ module.exports.index = async (req, res) => {
         res.render('admin/productView', {
             site_title: SITE_TITLE,
             title: 'Product',
-            products: products
+            products: products,
+            messages: req.flash(),
         });
     } else {
         res.render('admin/productView', {
             site_title: SITE_TITLE,
             title: 'Product',
-            products: products
+            products: products,
+            messages: req.flash(),
         });
     }
 }
@@ -22,18 +24,21 @@ module.exports.details = (request, response) => {
     if (request.session.userId) {
         response.redirect('product-details', {
             site_title: SITE_TITLE,
-            title: 'Product-details'
+            title: 'Product-details',
+            messages: req.flash(),
         });
     } else {
         response.render('product-details', {
             site_title: SITE_TITLE,
-            title: 'Product-details'
+            title: 'Product-details',
+            messages: req.flash(),
         });
     }
 };
 module.exports.create = (req, res) => {
     res.render('admin/productCreate', {
-        req: req
+        req: req,
+        messages: req.flash(),
     })
 };
 module.exports.doCreate = (request, response) => {
@@ -79,7 +84,8 @@ module.exports.update = async (request, response) => {
         response.redirect('product-update', {
             site_title: SITE_TITLE,
             title: 'Product Update',
-            product: product
+            product: product,
+            messages: req.flash(),
         });
     }
     try {

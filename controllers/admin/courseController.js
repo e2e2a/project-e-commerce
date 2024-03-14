@@ -10,6 +10,7 @@ module.exports.index = async (req, res) => {
             title: 'Courses',
             courses: courses,
             req:req,
+            messages: req.flash(),
         });
     } else {
         res.render('admin/courseView', {
@@ -17,13 +18,15 @@ module.exports.index = async (req, res) => {
             title: 'Courses',
             courses: courses,
             req:req,
+            messages: req.flash(),
         });
     }
 }
 
 module.exports.create = (req, res) => {
     res.render('admin/courseCreate', {
-        req: req
+        req: req,
+        messages: req.flash(),
     })
 };
 
