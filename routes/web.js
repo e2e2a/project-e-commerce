@@ -49,6 +49,14 @@ module.exports = function(app){
     app.get('/admin/user/create', adminUserController.create);
     app.post('/admin/user/doCreate', adminUserController.doCreate);
     app.get('/admin/enrollment', adminEnrollmentController.index);
+    app.post('/admin/enrollment', adminEnrollmentController.actions);
     app.get('/admin/enrollment/create', adminEnrollmentController.create);
     app.post('/admin/enrollment/doCreate', adminEnrollmentController.doCreate);
+    app.get('/admin/enrollment/approved', adminEnrollmentController.statusApproved);
+    app.post('/admin/enrollment/deleteApproved', adminEnrollmentController.deleteApproved);
+    app.get('/admin/enrollment/disapproved', adminEnrollmentController.statusDisapproved);
+    app.post('/admin/enrollment/deleteDisapproved', adminEnrollmentController.deleteDisapproved);
+    app.get('/admin/enrollment/done', adminEnrollmentController.statusDone);
+    app.post('/admin/enrollment/deleteDone', adminEnrollmentController.deleteDone);
+    
 }

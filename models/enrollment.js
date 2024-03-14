@@ -1,6 +1,5 @@
 var mongoose = require("mongoose");
 
-
 var schema = mongoose.Schema({
     userId: { 
         type: mongoose.Schema.Types.ObjectId, 
@@ -44,7 +43,13 @@ var schema = mongoose.Schema({
     dateEnrolling: {
         type: String,
     },
-    dateEnrolled: {
+    dateApproved: {
+        type: String,
+    },
+    dateDisapproved: {
+        type: String,
+    },
+    dateEnd: {
         type: String,
     },
     isApproved: {

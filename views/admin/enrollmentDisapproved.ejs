@@ -57,13 +57,14 @@
                                                 <th>Schedule</th>
                                                 <th>Time</th>
                                                 <th>Date Enrolling</th>
+                                                <th>Date Disapproved</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% if(enrollements.length > 0) {%>
-                                                <% enrollements.forEach(enrollement=> { %>
-                                                    <% if(enrollement.isApproved === 'false') {%>
+                                        <% if(enrollements.length > 0) {%>
+                                            <% enrollements.forEach(enrollement=> { %>
+                                                <% if(enrollement.status === 'disapproved') {%>
                                             <tr>
                                                 <td><%= enrollement._id %></td>
                                                 <td><%= enrollement.courseTitle %></td>
@@ -77,21 +78,14 @@
                                                 <td><%= enrollement.schedule %></td>
                                                 <td><%= enrollement.time %></td>
                                                 <td><%= enrollement.dateEnrolling %></td>
+                                                <td><%= enrollement.dateDisapproved %></td>
                                                 <td class="align-middle text-center">
-                                                    <form action="/admin/enrollment" method="post">
+                                                    <form action="/admin/enrollment/deleteDisapproved" method="post">
                                                         <input type="hidden" name="enrollementId" value="<%= enrollement._id %>">
                                                         <div class="btn-group text-center justify-content-center">
-                                                            <a href="#" class="btn btn-primary" data-toggle="tooltip"
-                                                                data-placement="top" title="Edit">
-                                                                <i class="zmdi zmdi-edit"></i>
-                                                            </a>
-                                                            <button type="submit" name="actions" value="approved" class="btn btn-success" data-toggle="tooltip"
-                                                                data-placement="top" title="Approved">
-                                                                <i class="zmdi zmdi-check"></i>
-                                                            </button>
-                                                            <button type="submit" name="actions" value="disapproved" class="btn btn-danger" data-toggle="tooltip"
+                                                            <button type="submit" name="submit" class="btn btn-danger" data-toggle="tooltip"
                                                                 data-placement="top" title="Disapproved">
-                                                                <i class="zmdi zmdi-close"></i>
+                                                                <i class="zmdi zmdi-delete"></i>
                                                             </button>
                                                         </div>
                                                     </form>

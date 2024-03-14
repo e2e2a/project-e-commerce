@@ -33,14 +33,12 @@ module.exports.create = async (req, res) => {
 
 module.exports.doCreate = async (req, res) => {
     const titleChecking = await Course.find({ title: req.body.courseTitle })
-    console.log(req.body.courseTitle)
-    console.log(titleChecking)
     if (titleChecking && titleChecking.length > 0) {
         const existingEnrollment = await Enrollement.findOne({
             name: req.body.name,
             courseTitle: req.body.courseTitle
         });
-        if (!existingEnrollment || existingEnrollment.status === 'done' || existingEnrollment.status === 'cancelled') {
+        if (!existingEnrollment || existingEnrollment.status === 'done' || existingEnrollment.status === 'disaproved') {
             const currentDate = new Date();
             const formattedDate = currentDate.toISOString().split('T')[0];
             const enroll = new Enrollement({
@@ -74,3 +72,113 @@ module.exports.doCreate = async (req, res) => {
         return res.redirect('/admin/enrollment/create');
     }
 }
+
+module.exports.actions = async (req, res) => {
+    const actions = req.body.actions;
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0];
+    const enrollementId = req.body.enrollementId;
+    if (actions === 'approved') {
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { isApproved: true, dateApproved: formattedDate, status: 'approved' }, { new: true });
+        if (userEnrollment) {
+            console.log('Success enrollment approved');
+            req.flash('message', 'Enrollment approved successfully!');
+            return res.redirect('/admin/enrollment');
+        } else {
+            console.log('Failed enrollment approved');
+            req.flash('message', 'Enrollment approved Failed!');
+            return res.redirect('/admin/enrollment');
+        }
+    } else if (actions === 'disapproved') {
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { isApproved: true, dateDisapproved: formattedDate, status: 'disapproved' }, { new: true });
+        if (userEnrollment) {
+            console.log('Enrollment Disapproved');
+            req.flash('message', 'Enrollment Disapproved successfully!');
+            return res.redirect('/admin/enrollment');
+        } else {
+            console.log('Failed enrollment Disapproved');
+            req.flash('message', 'Enrollment Disapproved Failed!');
+            return res.redirect('/admin/enrollment');
+        }
+    }
+}
+
+module.exports.statusApproved = async (req, res) => {
+    const enrollements = await Enrollement.find();
+    const userLogin = await User.findById(req.session.login);
+    res.render('admin/enrollmentApproved', {
+        site_title: SITE_TITLE,
+        title: 'Enrollment',
+        req: req,
+        messages: req.flash(),
+        userLogin: userLogin,
+        enrollements: enrollements
+    });
+}
+module.exports.deleteApproved = async (req, res) => {
+    const enrollementId = req.body.enrollementId;
+    const enrollementToDelete = await Enrollement.findByIdAndDelete(enrollementId);
+    if (enrollementToDelete) {
+        console.log('enrollment Deleted');
+        req.flash('message', 'Enrollment Deleted!');
+        return res.redirect('/admin/enrollment/approved');
+    } else{
+        console.log('failed enrollment Deleted');
+        req.flash('message', 'Enrollment Deleted Failed!');
+        return res.redirect('/admin/enrollment/approved');
+    }
+}
+
+module.exports.statusDisapproved = async (req, res) => {
+    const enrollements = await Enrollement.find();
+    const userLogin = await User.findById(req.session.login);
+    res.render('admin/enrollmentDisapproved', {
+        site_title: SITE_TITLE,
+        title: 'Enrollment',
+        req: req,
+        messages: req.flash(),
+        userLogin: userLogin,
+        enrollements: enrollements
+    });
+}
+module.exports.deleteDisapproved = async (req, res) => {
+    const enrollementId = req.body.enrollementId;
+    const enrollementToDelete = await Enrollement.findByIdAndDelete(enrollementId);
+    if (enrollementToDelete) {
+        console.log('enrollment Deleted');
+        req.flash('message', 'Enrollment Deleted!');
+        return res.redirect('/admin/enrollment/disapproved');
+    } else{
+        console.log('failed enrollment Deleted');
+        req.flash('message', 'Enrollment Deleted Failed!');
+        return res.redirect('/admin/enrollment/disapproved');
+    }
+}
+
+module.exports.statusDone = async (req, res) => {
+    const enrollements = await Enrollement.find();
+    const userLogin = await User.findById(req.session.login);
+    res.render('admin/enrollmentDone', {
+        site_title: SITE_TITLE,
+        title: 'Enrollment',
+        req: req,
+        messages: req.flash(),
+        userLogin: userLogin,
+        enrollements: enrollements
+    });
+}
+
+module.exports.deleteDone = async (req, res) => {
+    const enrollementId = req.body.enrollementId;
+    const enrollementToDelete = await Enrollement.findByIdAndDelete(enrollementId);
+    if (enrollementToDelete) {
+        console.log('enrollment Deleted');
+        req.flash('message', 'Enrollment Deleted!');
+        return res.redirect('/admin/enrollment/done');
+    } else{
+        console.log('failed enrollment Deleted');
+        req.flash('message', 'Enrollment Deleted Failed!');
+        return res.redirect('/admin/enrollment/done');
+    }
+}
+
