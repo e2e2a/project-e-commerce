@@ -1,6 +1,7 @@
 const SITE_TITLE = 'Shope';
 const Course = require('../../models/course');
 const Enroll = require('../../models/enrollment');
+const User = require('../../models/user');
 module.exports.index = async (req, res) => {
     const courses = await Course.find();
     res.render('courses', {
@@ -13,12 +14,24 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.enroll = async (req, res) => {
-    const course = await Course.findById(req.params.courseId);
-    res.render('courseEnrollment', {
-        req: req,
-        course: course,
-        messages: req.flash(),
-    });
+    try {
+        const userLogin = await User.findById(req.session.login);
+        const course = await Course.findById(req.params.courseId);
+        if (req.session.login) {
+            res.render('courseEnrollment', {
+                req: req,
+                course: course,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+            });
+        } else {
+            return res.redirect('/login');
+        }
+    } catch (error) {
+        console.log('error:', error)
+        return res.status(500).render('500');
+    }
 }
 
 module.exports.doEnroll = async (req, res) => {
@@ -53,7 +66,6 @@ module.exports.doEnroll = async (req, res) => {
         return res.redirect('/courses');
     } else {
         console.log('user Already apply this enrollment');
-        // User is already enrolled in the course
         req.flash('message', 'You are already enrolled in this course.');
         return res.redirect('/courses');
     }

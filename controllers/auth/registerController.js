@@ -6,16 +6,25 @@ const nodemailer = require('nodemailer');
 const { customAlphabet } = require('nanoid');
 const sixDigitCode = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 6);
 module.exports.register = async (req, res) => {
-    const userLogin = await User.findById(req.session.login);
-    res.render('register', {
-        site_title: SITE_TITLE,
-        title: 'Register',
-        session: req.session,
-        messages: req.flash(),
-        currentUrl: req.originalUrl,
-        userLogin: userLogin,
-        req: req,
-    });
+    try {
+        const userLogin = await User.findById(req.session.login);
+        if (req.session.login) {
+            return res.redirect('/index');
+        } else {
+            res.render('register', {
+                site_title: SITE_TITLE,
+                title: 'Register',
+                session: req.session,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+                req: req,
+            });
+        }
+    } catch (error) {
+        console.log('error:', error)
+        return res.status(500).render('500');
+    }
 }
 
 module.exports.doRegister = async (req, res) => {
