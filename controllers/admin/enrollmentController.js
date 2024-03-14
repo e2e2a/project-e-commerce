@@ -1,19 +1,20 @@
 const SITE_TITLE = 'Shope';
 const User = require('../../models/user');
+const Enrollement = require('../../models/enrollment');
 
 module.exports.index = async (req, res) => {
-    const users = await User.find();
+    const enrollements = await Enrollement.find();
     if (req.session.login) {
-        res.render('admin/userView', {
+        res.render('admin/enrollmentView', {
             site_title: SITE_TITLE,
-            title: 'User',
-            users: users
+            title: 'Enrollment',
+            enrollements: enrollements
         });
     } else {
-        res.render('admin/userView', {
+        res.render('admin/enrollmentView', {
             site_title: SITE_TITLE,
-            title: 'User',
-            users: users
+            title: 'Enrollment',
+            enrollements: enrollements
         });
     }
 }
@@ -43,7 +44,7 @@ module.exports.doCreate = async (req, res) => {
                 age: req.body.age,
                 role: req.body.role,
                 password: req.body.password,
-                isVerified: true
+                isVerified: 'true'
             };
             const updatedUser = await User.findByIdAndUpdate(existingUser._id, user, {
                 new: true

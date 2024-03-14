@@ -41,9 +41,6 @@ var schema = mongoose.Schema({
     time: {
         type: String,
     },
-    time: {
-        type: String,
-    },
     dateEnrolling: {
         type: String,
     },
@@ -53,7 +50,7 @@ var schema = mongoose.Schema({
     isApproved: {
         type: String,
     },
-    contract: {
+    status: {
         type: String,
     },
 }, {

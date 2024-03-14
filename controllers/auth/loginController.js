@@ -14,7 +14,6 @@ module.exports.login =async (req, res) => {
 }
 module.exports.doLogin = async (req, res) => {
     try {
-        console.log('hello')
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
              // 400 Bad Request

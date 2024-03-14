@@ -6,7 +6,8 @@ module.exports.index = async (req, res) => {
         site_title: SITE_TITLE,
         title: 'Shop',
         products: products,
-        req: req
+        req: req,
+        messages: req.flash(),
     });
 }
 module.exports.detail = async (req, res) => {
@@ -16,7 +17,8 @@ module.exports.detail = async (req, res) => {
         site_title: SITE_TITLE,
         title: 'Detail',
         product: product,
-        req: req
+        req: req,
+        messages: req.flash(),
     });
 }
 module.exports.indexCategory = async (req, res) => {
@@ -28,6 +30,7 @@ module.exports.indexCategory = async (req, res) => {
         title: 'Category',
         products: products,
         productCategory:productCategory,
-        req: req
+        req: req,
+        messages: req.flash(),
     });
 }

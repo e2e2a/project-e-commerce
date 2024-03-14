@@ -8,15 +8,23 @@
         <div class="banner_inner d-flex align-items-center">
           <div class="container">
             <div class="row justify-content-center align-items-center d-flex">
-              <div class="col-lg-6 ">
+              <div class="col-lg-6">
                 <div class="login_form bg-white p-4 rounded">
                     <h3 class="mb-4 text-center p-3">Login</h3>
+                    
                     <form action="/doLogin" method="post">
+                      <% if(messages.error) {%>
+                        <div class="">
+                            <h4 class="alert alert-danger" style="text-align: center; color: red;text-transform: uppercase;"> <%= messages.error %></h4>
+                        </div>
+                      <% } %>
                         <div class="form-group position-relative">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                          <label for="email" class=" form-control-label">Email</label>
+                          <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                         </div>
                         <div class="form-group position-relative">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                          <label for="password" class=" form-control-label">Password</label>
+                          <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                         </div>
                         <div class="form-group d-flex justify-content-end ">
                             <div>

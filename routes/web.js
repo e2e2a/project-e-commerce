@@ -1,12 +1,15 @@
 const adminProductController = require('../controllers/admin/productController');
 const adminCourseController = require('../controllers/admin/courseController');
 const adminUserController = require('../controllers/admin/userController');
+const adminEnrollmentController = require('../controllers/admin/enrollmentController');
 
 const userProductController = require('../controllers/user/productController');
 const userCourseController = require('../controllers/user/courseController');
 
 
 const authLoginController = require('../controllers/auth/loginController');
+const authRegisterController = require('../controllers/auth/registerController');
+const authVerifyController = require('../controllers/auth/verifyController');
 module.exports = function(app){
     app.get('/', (req,res) => {
         res.render('index',{
@@ -15,6 +18,10 @@ module.exports = function(app){
     })
     app.get('/login', authLoginController.login);
     app.post('/doLogin', authLoginController.doLogin);
+    app.get('/register', authRegisterController.register);
+    app.post('/doRegister', authRegisterController.doRegister);
+    app.get('/verify', authVerifyController.verify);
+    app.post('/doVerify', authVerifyController.doVerify);
     
     //products
     app.get('/products', userProductController.index);
@@ -41,4 +48,7 @@ module.exports = function(app){
     app.get('/admin/user', adminUserController.index);
     app.get('/admin/user/create', adminUserController.create);
     app.post('/admin/user/doCreate', adminUserController.doCreate);
+    app.get('/admin/enrollment', adminEnrollmentController.index);
+    app.get('/admin/enrollment/create', adminEnrollmentController.create);
+    app.post('/admin/enrollment/doCreate', adminEnrollmentController.doCreate);
 }

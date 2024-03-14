@@ -1,0 +1,66 @@
+<%- include('./partials/header/header.ejs'); %>
+
+  <body>
+    <%- include('./partials/navigation/nav.ejs'); %>
+
+    <!--================Home Banner Area =================-->
+    <section class="home_banner_area mb-40">
+        <div class="banner_inner d-flex align-items-center">
+          <div class="container">
+            <div class="row justify-content-center align-items-center d-flex">
+              <div class="col-lg-6 mt-40 mb-40">
+                <div class="login_form bg-white p-4 rounded">
+                    <h3 class="mb-4 text-center p-3">Register</h3>
+                    <form action="/doRegister" method="post">
+                      <% if(messages.error) {%>
+                        <div class="">
+                            <h4 class="alert alert-danger" style="text-align: center; color: red;text-transform: uppercase;"> <%= messages.error %></h4>
+                        </div>
+                      <% } %>
+                        <div class="form-group position-relative">
+                            <label for="fullname" class=" form-control-label">Fullname</label>
+                            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="fullname" required>
+                        </div>
+                        <div class="form-group position-relative">
+                            <label for="email" class=" form-control-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group position-relative">
+                            <label for="address" class=" form-control-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="Address" required>
+                        </div>
+                        <div class="form-group position-relative">
+                            <label for="age" class=" form-control-label">Age</label>
+                            <input type="text" class="form-control" id="age" name="age" pattern="^[0-9]{1,10}$" placeholder="Age" required>
+                        </div>
+                        <div class="form-group position-relative">
+                            <label for="password" class=" form-control-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                        </div>
+                        <div class="form-group position-relative">
+                            <label for="password" class=" form-control-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                        </div>
+                        <div class="form-group d-flex justify-content-end ">
+                            <div>
+                                <a href="/login">Already a member?</a>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block mt-20 ">Submit</button>
+                        <div class="mr-auto mb-20">
+                            <a href="/forgot-password" class="text-secondary">Forgot Password?</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--================End Home Banner Area =================-->
+
+  <%- include('./partials/footer/footer.ejs'); %>
+</body>
+<%- include('./partials/footer/footer_js.ejs'); %>

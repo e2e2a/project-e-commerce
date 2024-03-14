@@ -8,6 +8,7 @@ module.exports.index = async (req, res) => {
         title: 'Courses',
         courses: courses,
         req: req,
+        messages: req.flash(),
     });
 }
 
@@ -16,6 +17,7 @@ module.exports.enroll = async (req, res) => {
     res.render('courseEnrollment', {
         req: req,
         course: course,
+        messages: req.flash(),
     });
 }
 
@@ -25,7 +27,7 @@ module.exports.doEnroll = async (req, res) => {
         userId: req.session.login,
         courseId: req.body.courseId
     });
-    if (!existingEnrollment || existingEnrollment.contract === 'done' || existingEnrollment.contract === 'cancelled') {
+    if (!existingEnrollment || existingEnrollment.status === 'done' || existingEnrollment.status === 'cancelled') {
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().split('T')[0];
         const enroll = new Enroll({
@@ -50,8 +52,9 @@ module.exports.doEnroll = async (req, res) => {
         req.flash('message', 'Enrollement Successful!');
         return res.redirect('/courses');
     } else {
+        console.log('user Already apply this enrollment');
         // User is already enrolled in the course
-        req.flash('error', 'You are already enrolled in this course.');
+        req.flash('message', 'You are already enrolled in this course.');
         return res.redirect('/courses');
     }
 }
