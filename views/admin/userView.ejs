@@ -55,8 +55,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% if(users.length > 0) {%>
+                                            <% if(users.length > 0) { %>
                                                 <% users.forEach(user=> { %>
+                                                    <% if(user.isVerified === true) { %>
                                             <tr>
                                                 <td><%= user._id %></td>
                                                 <td><%= user.fullname %></td>
@@ -68,7 +69,7 @@
                                                     <form action="/admin/user/delete" method="post">
                                                         <input type="hidden" name="userId" value="<%= user._id %>">
                                                         <div class="btn-group text-center justify-content-center">
-                                                            <a href="" class="btn btn-primary" data-toggle="tooltip"
+                                                            <a href="/admin/user/edit/<%= user._id %>" class="btn btn-primary" data-toggle="tooltip"
                                                                 data-placement="top" title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
                                                             </a>
@@ -80,6 +81,7 @@
                                                     </form>
                                                 </td>
                                             </tr>
+                                            <% } %>
                                             <% }) %>
                                             <% } %>
                                         </tbody>

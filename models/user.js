@@ -21,8 +21,9 @@ var schema = mongoose.Schema({
     password: {
         type: String,
     },
-    isVerified: {
-        type: String,
+    isVerified: { 
+        type: Boolean, 
+        default: false 
     },
 }, {
     versionKey: false,

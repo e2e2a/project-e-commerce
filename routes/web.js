@@ -50,6 +50,8 @@ module.exports = function(app){
     app.post('/admin/user/delete', adminUserController.delete);
     app.get('/admin/user/create', adminUserController.create);
     app.post('/admin/user/doCreate', adminUserController.doCreate);
+    app.get('/admin/user/edit/:id', adminUserController.edit);
+    app.post('/admin/user/doEdit/:id', adminUserController.doEdit);
     app.get('/admin/enrollment', adminEnrollmentController.index);
     app.post('/admin/enrollment', adminEnrollmentController.actions);
     app.get('/admin/enrollment/create', adminEnrollmentController.create);
