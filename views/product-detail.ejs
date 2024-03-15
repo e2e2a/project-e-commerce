@@ -64,13 +64,16 @@
               <p>
                 <%= product.description %>
               </p>
-              <div class="product_count">
-                <label for="qty">Quantity:</label>
-                <input type="text"  name="qty" maxlength="12" value="1" title="Quantity:" class="input-text qty" />
-              </div>
-              <div class="card_area">
-                <button type="submit" class="main_btn">Add to Cart</button>
-              </div>
+              <form action="/cartsingle" method="post">
+                <input type="hidden" name="productId" value="<%= product._id %>">
+                <div class="product_count">
+                  <label for="quantity">Quantity:</label>
+                  <input type="text"  name="quantity" maxlength="12" value="1" title="Quantity:" class="input-text qty" />
+                </div>
+                <div class="card_area">
+                  <button type="submit" class="main_btn">Add to Cart</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

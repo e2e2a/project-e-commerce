@@ -5,7 +5,7 @@ const adminEnrollmentController = require('../controllers/admin/enrollmentContro
 
 const userProductController = require('../controllers/user/productController');
 const userCourseController = require('../controllers/user/courseController');
-
+const userCartController = require('../controllers/user/addCartController');
 
 const authLoginController = require('../controllers/auth/loginController');
 const authRegisterController = require('../controllers/auth/registerController');
@@ -31,11 +31,12 @@ module.exports = function(app){
     app.get('/courses', userCourseController.index);
     app.get('/course/enroll/:courseId', userCourseController.enroll);
     app.post('/course/doEnroll', userCourseController.doEnroll);
-
-    
+    //add-to-cart
+    app.post('/cart', userCartController.addCart)
+    app.post('/cartsingle', userCartController.addCartSingle)
     //admin
     app.get('/admin', (req,res) => {
-        res.render('admin/index',{
+        res.render('admin/index', {
             req:req
         })
     })
@@ -69,5 +70,4 @@ module.exports = function(app){
     app.post('/admin/enrollment/deleteDisapproved', adminEnrollmentController.deleteDisapproved);
     app.get('/admin/enrollment/done', adminEnrollmentController.statusDone);
     app.post('/admin/enrollment/deleteDone', adminEnrollmentController.deleteDone);
-    
 }

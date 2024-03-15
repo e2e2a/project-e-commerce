@@ -59,14 +59,17 @@
                   <div class="single-product">
                     <div class="product-img">
                       <img class="card-img img-thumbnail" src="<%= product.imageURL %>" alt="" style="height: 300px;"/>
-                      <div class="p_icon">
-                        <a href="/product/detail/<%= product._id %>">
-                          <i class="ti-eye"></i>
-                        </a>
-                        <a href="#">
-                          <i class="ti-heart"></i>
-                        </a>
-                      </div>
+                      <form action="/cart" method="post">
+                        <input type="hidden" name="productId" value="<%= product._id %>">
+                        <div class="p_icon">
+                          <a href="/product/detail/<%= product._id %>">
+                            <i class="ti-eye"></i>
+                          </a>
+                          <button type="submit">
+                            <i class="ti-heart"></i>
+                          </button>
+                        </div>
+                      </form>
                     </div>
                     <div class="product-btm">
                       <a href="#" class="d-block">

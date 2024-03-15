@@ -3565,6 +3565,28 @@ h6 {
     color: #fff;
     background: #71cd14
 }
+.single-product .product-img .p_icon button {
+    display: inline-block;
+    height: 36px;
+    line-height: 40px;
+    width: 36px;
+    text-align: center;
+    background: #fff;
+    border-radius: 30px;
+    color: #2a2a2a;
+    margin-right: 25px;
+    border: none;
+    cursor: pointer;
+}
+
+.single-product .product-img .p_icon button:last-child {
+    margin-right: 0px
+}
+
+.single-product .product-img .p_icon button:hover {
+    color: #fff;
+    background: #71cd14
+}
 
 .single-product .product-btm {
     padding: 22px 25px 18px;
