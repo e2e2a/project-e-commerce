@@ -1,0 +1,98 @@
+<%- include('./partials/header/header.ejs'); %>
+<body class="animsition">
+    <div class="page-wrapper">
+        <%- include('./partials/navigation/mobile-nav.ejs'); %>
+        <%- include('./partials/navigation/nav.ejs'); %>
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <%- include('./partials/sidebar/sidebar.ejs'); %>
+
+            <!-- MAIN CONTENT-->
+            <div class="main-content">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>Update Enrollment</strong>
+                                        <small></small>
+                                    </div>
+                                    <div class="card-body card-block">
+                                        <form action="/admin/enrollment/doEdit/<%= enrollment._id %>" method="post">
+                                              <div class="form-group">
+                                                  <label for="courseTitle" class=" form-control-label">Course Title</label>
+                                                  <input type="text" id="courseTitle" name="courseTitle" placeholder="Enter FullName" class="form-control" value="<%= enrollment.courseTitle %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="name" class=" form-control-label">FullName</label>
+                                                  <input type="text" id="name" name="name" placeholder="Enter FullName" class="form-control" value="<%= enrollment.courseTitle %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="address" class=" form-control-label">Address</label>
+                                                  <input type="text" id="address" name="address" placeholder="Enter Address" class="form-control" value="<%= enrollment.address %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="age" class=" form-control-label">Age</label>
+                                                  <input type="text" id="age" name="age" pattern="^[0-9]{1,10}$" placeholder="Enter Age" class="form-control" value="<%= enrollment.age %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="gender" class="form-control-label">Gender</label>
+                                                  <input type="text" id="gender" name="gender" placeholder="Gender" class="form-control" value="<%= enrollment.gender %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="contact" class=" form-control-label">Phone Number</label>
+                                                  <input type="text" id="contact" name="contact" pattern="(\+639\d{2}-\d{3}-\d{4}|\+639\d{9}|09\d{2}-\d{3}-\d{4}|09\d{9})" placeholder="Enter Phone Number" value="<%= enrollment.contact %>" class="form-control" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="fatherName" class="form-control-label">Father's Name</label>
+                                                  <input type="text" id="fatherName" name="fatherName" placeholder="Enter Father's Name" class="form-control" value="<%= enrollment.fatherName %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="motherName" class="form-control-label">Mother's Name</label>
+                                                  <input type="text" id="motherName" name="motherName" placeholder="Enter Mother's Name" class="form-control" value="<%= enrollment.motherName %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="form-group flex-column">
+                                                  <label for="level" class="form-control-label">Level Experience</label>
+                                                  <select name="level" id="level" class="form-control">
+                                                      <option value="Beginner" <% if(enrollment.level === 'Beginner') {%> selected <% } %>>Beginner</option>
+                                                      <option value="Intermediate" <% if(enrollment.level === 'Intermediate') {%> selected <% } %>>Intermediate</option>
+                                                      <option value="Pro" <% if(enrollment.level === 'Pro') {%> selected <% } %>>Pro</option>
+                                                  </select>
+                                              </div>
+                                              <div class="form-group flex-column">
+                                                  <label for="schedule" class="form-control-label">Choose Schedule</label>
+                                                  <div id="schedule">
+                                                    <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
+                                                    <% daysOfWeek.forEach(day => { %>
+                                                        <input type="checkbox" id="<%= day.toLowerCase() %>" name="schedule" value="<%= day %>" <% if(enrollment.schedule.includes(day)) { %> checked <% } %>>
+                                                        <label for="<%= day.toLowerCase() %>"><%= day %></label><br>
+                                                    <% }); %>
+                                                  </div>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="time" class=" form-control-label">Choose Time</label>
+                                                  <input type="time" id="time" name="time" placeholder="Enter Color" class="form-control" value="<%= enrollment.time %>" autocomplete="off" required/>
+                                              </div>
+                                              <div class="d-flex justify-content-end m-t-20">
+                                                  <button type="submit" class="btn btn-success">
+                                                      <i class="fa fa-dot-circle-o"></i> Submit
+                                                  </button>
+                                              </div>
+                                          </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <%- include('./partials/footer/copyright.ejs'); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+<%- include('./partials/footer/footer_js.ejs') %>

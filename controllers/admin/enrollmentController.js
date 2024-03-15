@@ -48,6 +48,7 @@ module.exports.doCreate = async (req, res) => {
                 address: req.body.address,
                 placeDeath: req.body.placeDeath,
                 age: req.body.age,
+                gender: req.body.gender,
                 contact: req.body.contact,
                 fatherName: req.body.fatherName,
                 motherName: req.body.motherName,
@@ -122,7 +123,7 @@ module.exports.deleteApproved = async (req, res) => {
         console.log('enrollment Deleted');
         req.flash('message', 'Enrollment Deleted!');
         return res.redirect('/admin/enrollment/approved');
-    } else{
+    } else {
         console.log('failed enrollment Deleted');
         req.flash('message', 'Enrollment Deleted Failed!');
         return res.redirect('/admin/enrollment/approved');
@@ -148,7 +149,7 @@ module.exports.deleteDisapproved = async (req, res) => {
         console.log('enrollment Deleted');
         req.flash('message', 'Enrollment Deleted!');
         return res.redirect('/admin/enrollment/disapproved');
-    } else{
+    } else {
         console.log('failed enrollment Deleted');
         req.flash('message', 'Enrollment Deleted Failed!');
         return res.redirect('/admin/enrollment/disapproved');
@@ -175,10 +176,69 @@ module.exports.deleteDone = async (req, res) => {
         console.log('enrollment Deleted');
         req.flash('message', 'Enrollment Deleted!');
         return res.redirect('/admin/enrollment/done');
-    } else{
+    } else {
         console.log('failed enrollment Deleted');
         req.flash('message', 'Enrollment Deleted Failed!');
         return res.redirect('/admin/enrollment/done');
     }
 }
 
+module.exports.edit = async (req, res) => {
+    try {
+        const enrollmentId = req.params.enrollmentId
+        const enrollment = await Enrollement.findById(enrollmentId)
+        res.render('admin/enrollmentEdit', {
+            site_title: SITE_TITLE,
+            title: 'Enrollment Update',
+            enrollment: enrollment,
+            messages: req.flash(),
+        });
+    } catch (err) {
+        return res
+            .status(err.status || 500)
+            .render('500', { err: err });
+    }
+}
+
+module.exports.doEdit = async (req, res) => {
+    const enrollmentId = req.params.enrollmentId
+    const enrollment = await Enrollement.findById(enrollmentId)
+    if (enrollment) {
+        const titleChecking = await Course.findOne({ title: req.body.courseTitle })
+        if (!titleChecking) {
+            req.flash('message', 'Course Title does not exist.');
+            return res.redirect(`/admin/enrollment/edit/${enrollment._id}`);
+        }
+        const enrollmentData = {
+            courseId: req.body.courseId,
+            courseTitle: req.body.courseTitle,
+            name: req.body.name,
+            address: req.body.address,
+            placeDeath: req.body.placeDeath,
+            age: req.body.age,
+            gender: req.body.gender,
+            contact: req.body.contact,
+            fatherName: req.body.fatherName,
+            motherName: req.body.motherName,
+            level: req.body.level,
+            schedule: req.body.schedule,
+            time: req.body.time,
+            isApproved: 'false',
+        };
+        const updatedEnrollement = await Enrollement.findByIdAndUpdate(enrollmentId, enrollmentData, {
+            new: true
+        })
+        if (updatedEnrollement) {
+            console.log('success Enrollment update');
+            req.flash('message', 'Enrollment Updated');
+            return res.redirect('/admin/enrollment');
+        } else {
+            return res
+                .status(404)
+                .render('404', { err: err });
+        }
+    } else {
+        req.flash('message', 'Please check the Enrollment Id');
+        return res.redirect(`/admin/enrollment`);
+    }
+}

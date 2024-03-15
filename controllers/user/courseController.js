@@ -51,6 +51,7 @@ module.exports.doEnroll = async (req, res) => {
             address: req.body.address,
             placeDeath: req.body.placeDeath,
             age: req.body.age,
+            gender: req.body.gender,
             contact: req.body.contact,
             fatherName: req.body.fatherName,
             motherName: req.body.motherName,

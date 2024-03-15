@@ -14,7 +14,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3 class="title-5 m-b-35">Products</h3>
+                                <h3 class="title-5 m-b-35">Enrollments</h3>
                                 <div class="table-data__tool">
                                     <div class="table-data__tool-left">
                                         <div class="rs-select2--light rs-select2--md">
@@ -50,6 +50,7 @@
                                                 <th>Fullname</th>
                                                 <th>Address</th>
                                                 <th>Age</th>
+                                                <th>Gender</th>
                                                 <th>Contact</th>
                                                 <th>Father's Name</th>
                                                 <th>Mother's Name</th>
@@ -70,6 +71,7 @@
                                                 <td><%= enrollement.name %></td>
                                                 <td><%= enrollement.address %></td>
                                                 <td><%= enrollement.age %></td>
+                                                <td><%= enrollement.gender %></td>
                                                 <td><%= enrollement.contact %></td>
                                                 <td><%= enrollement.fatherName %></td>
                                                 <td><%= enrollement.motherName %></td>
@@ -81,7 +83,7 @@
                                                     <form action="/admin/enrollment" method="post">
                                                         <input type="hidden" name="enrollementId" value="<%= enrollement._id %>">
                                                         <div class="btn-group text-center justify-content-center">
-                                                            <a href="#" class="btn btn-primary" data-toggle="tooltip"
+                                                            <a href="/admin/enrollment/edit/<%= enrollement._id %>" class="btn btn-primary" data-toggle="tooltip"
                                                                 data-placement="top" title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
                                                             </a>

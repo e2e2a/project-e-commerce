@@ -58,6 +58,8 @@ module.exports = function(app){
     app.get('/admin/user/edit/:id', adminUserController.edit);
     app.post('/admin/user/doEdit/:id', adminUserController.doEdit);
     app.get('/admin/enrollment', adminEnrollmentController.index);
+    app.get('/admin/enrollment/edit/:enrollmentId', adminEnrollmentController.edit);
+    app.post('/admin/enrollment/doEdit/:enrollmentId', adminEnrollmentController.doEdit);
     app.post('/admin/enrollment', adminEnrollmentController.actions);
     app.get('/admin/enrollment/create', adminEnrollmentController.create);
     app.post('/admin/enrollment/doCreate', adminEnrollmentController.doCreate);

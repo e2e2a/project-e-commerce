@@ -21,6 +21,9 @@ var schema = mongoose.Schema({
     age: {
         type: String,
     },
+    gender: {
+        type: String,
+    },
     contact: {
         type: String,
     },

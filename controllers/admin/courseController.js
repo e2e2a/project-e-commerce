@@ -85,13 +85,14 @@ module.exports.delete = async (req, res) => {
         return res.redirect('/admin/course');
     }
 }
+
 module.exports.edit = async (req, res) => {
     try {
         const courseId = req.params.courseId
         const course = await Course.findById(courseId)
         res.render('admin/courseEdit', {
             site_title: SITE_TITLE,
-            title: 'Product Update',
+            title: 'Course Update',
             course: course,
             messages: req.flash(),
         });
@@ -101,6 +102,7 @@ module.exports.edit = async (req, res) => {
             .render('500', { err: err });
     }
 }
+
 module.exports.doEdit = async (req, res) => {
     const courseId = req.params.courseId;
     const course = await Course.findById(courseId);
