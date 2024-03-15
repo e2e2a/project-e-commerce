@@ -1,16 +1,25 @@
 const Cart = require('../../models/cart');
 const User = require('../../models/user');
 const Product = require('../../models/product');
-
+const SITE_TITLE = 'Dunamis';
 module.exports.cart = async (req, res) => {
     try {
+        const userLogin = await User.findById(req.session.login);
+        if(userLogin){
         const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
         res.render('cart', {
             req: req,
             messages: req.flash(),
             currentUrl: req.originalUrl,
             cart: cart,
+            currentUrl: req.originalUrl,
+            userLogin: userLogin,
+            SITE_TITLE:SITE_TITLE,
+            title: 'Cart'
         });
+    }else{
+        return res.redirect('/login');
+    }
     } catch (error) {
         console.error('Error fetching cart:', error);
         res.status(500).send('Internal Server Error');

@@ -1,8 +1,11 @@
-const SITE_TITLE = 'Shope';
+const SITE_TITLE = 'Dunamis';
 const Course = require('../../models/course');
 const Enroll = require('../../models/enrollment');
 const User = require('../../models/user');
+const Cart = require('../../models/cart');
 module.exports.index = async (req, res) => {
+    const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+    const userLogin = await User.findById(req.session.login);
     const courses = await Course.find();
     res.render('courses', {
         site_title: SITE_TITLE,
@@ -10,12 +13,16 @@ module.exports.index = async (req, res) => {
         courses: courses,
         req: req,
         messages: req.flash(),
+        cart:cart,
+        userLogin:userLogin,
+        currentUrl: req.originalUrl,
     });
 }
 
 module.exports.enroll = async (req, res) => {
     try {
         const userLogin = await User.findById(req.session.login);
+        const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
         const course = await Course.findById(req.params.courseId);
         if (req.session.login) {
             res.render('courseEnrollment', {
@@ -24,6 +31,7 @@ module.exports.enroll = async (req, res) => {
                 messages: req.flash(),
                 currentUrl: req.originalUrl,
                 userLogin: userLogin,
+                cart:cart,
             });
         } else {
             return res.redirect('/login');

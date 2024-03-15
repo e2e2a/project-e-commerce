@@ -3,6 +3,7 @@ const adminCourseController = require('../controllers/admin/courseController');
 const adminUserController = require('../controllers/admin/userController');
 const adminEnrollmentController = require('../controllers/admin/enrollmentController');
 
+const userIndexController = require('../controllers/user/indexController');
 const userProductController = require('../controllers/user/productController');
 const userCourseController = require('../controllers/user/courseController');
 const userCartController = require('../controllers/user/cartController');
@@ -10,20 +11,17 @@ const userCartController = require('../controllers/user/cartController');
 const authLoginController = require('../controllers/auth/loginController');
 const authRegisterController = require('../controllers/auth/registerController');
 const authVerifyController = require('../controllers/auth/verifyController');
+const authLogoutController = require('../controllers/auth/logoutController');
 module.exports = function(app){
-    app.get('/', (req,res) => {
-        res.render('index',{
-            req:req,
-        })
-    })
     app.get('/login', authLoginController.login);
     app.post('/doLogin', authLoginController.doLogin);
+    app.post('/logout', authLogoutController.logout);
     app.get('/register', authRegisterController.register);
     app.post('/doRegister', authRegisterController.doRegister);
     app.get('/verify', authVerifyController.verify);
     app.post('/doVerify', authVerifyController.doVerify);
-    
     //products
+    app.get('/', userIndexController.index);
     app.get('/products', userProductController.index);
     app.get('/products/:category', userProductController.indexCategory);
     app.get('/product/detail/:id', userProductController.detail);
