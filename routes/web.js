@@ -5,7 +5,7 @@ const adminEnrollmentController = require('../controllers/admin/enrollmentContro
 
 const userProductController = require('../controllers/user/productController');
 const userCourseController = require('../controllers/user/courseController');
-const userCartController = require('../controllers/user/addCartController');
+const userCartController = require('../controllers/user/cartController');
 
 const authLoginController = require('../controllers/auth/loginController');
 const authRegisterController = require('../controllers/auth/registerController');
@@ -32,6 +32,7 @@ module.exports = function(app){
     app.get('/course/enroll/:courseId', userCourseController.enroll);
     app.post('/course/doEnroll', userCourseController.doEnroll);
     //add-to-cart
+    app.get('/carts', userCartController.cart)
     app.post('/cart', userCartController.addCart)
     app.post('/cartsingle', userCartController.addCartSingle)
     //admin

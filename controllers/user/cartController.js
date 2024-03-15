@@ -2,6 +2,13 @@ const Cart = require('../../models/cart');
 const User = require('../../models/user');
 const Product = require('../../models/product');
 
+module.exports.cart = async (req,res) => {
+    res.render('cart', {
+        req:req,
+        messages: req.flash(),
+        currentUrl: req.originalUrl,
+    })
+}
 
 module.exports.addCart = async (req, res) => {
     const productId = req.body.productId;
