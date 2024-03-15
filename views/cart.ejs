@@ -68,8 +68,10 @@
                                     <h5>₱<%= itemTotal %></h5>
                                 </td>
                                 <td>
+                                  <input type="hidden" name="itemId" value="<%= item._id %>">
                                   <div class="d-flex align-items-center justify-content-center align-middle">
-                                    <button type="submit" class="gray_btn" style="cursor: pointer;">Update</button>
+                                    <button type="submit" name="actions" value="update" class="gray_btn" style="cursor: pointer;">Update</button>
+                                    <button type="submit" name="actions" value="delete" class="btn btn-danger" style="cursor: pointer;"><i class="ti-trash" aria-hidden="true"></i></button>
                                   </div>
                                 </td>
                             </tr>
