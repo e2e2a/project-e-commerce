@@ -78,7 +78,7 @@ module.exports.doCreate = (request, response) => {
                 product.imageURL = `/public/uploads/product/${request.file.filename}`;
                 await product.save();
                 console.log('success')
-                req.flash('message', 'Product Created.')
+                request.flash('message', 'Product Created.')
                 return response.redirect('/admin/product');
             }, (err) => {
                 return response

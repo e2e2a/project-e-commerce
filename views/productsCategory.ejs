@@ -8,15 +8,6 @@
       <div class="banner_inner d-flex align-items-center">
         <div class="container">
           <div class="banner_content d-md-flex justify-content-between align-items-center">
-            <div class="mb-3 mb-md-0">
-              <h2>Shop Category</h2>
-              <p>Very us move be blessed multiply night</p>
-            </div>
-            <div class="page_link">
-              <a href="index.html">Home</a>
-              <a href="category.html">Shop</a>
-              <a href="category.html">Women Fashion</a>
-            </div>
           </div>
         </div>
       </div>
@@ -26,6 +17,13 @@
     <!--================Category Product Area =================-->
     <section class="cat_product_area section_gap">
       <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-12">
+            <div class="main_title">
+              <h2><span>Products Category</span></h2>
+            </div>
+          </div>
+        </div>
         <div class="row d-flex">
           <div class="col-lg-3 mb-20">
             <div class="left_sidebar_area">
@@ -35,7 +33,9 @@
                 </div>
                 <div class="widgets_inner">
                   <ul class="list">
-                  
+                    <li class="">
+                      <a href="/products" >All</a>
+                    </li>
                   
                   <% const uniqueCategories = [...new Set(products.map(product => product.category))]; uniqueCategories.forEach(category => { %>
                   <% let active='' %>
@@ -50,7 +50,13 @@
             </div>
           </div>
           <div class="col-lg-9">
-            <div class="latest_product_inner">
+            <div class="product_top_bar d-flex align-items-center">
+              <div class="col-12 col-lg-6 d-flex align-items-center ">
+                <label for="search" class=" col-form-label mr-2" style="font-size: 18px;font-weight: 500;">Search</label>
+                <input type="text" name="search" class="form-control" id="searchProductName" class="sorting" placeholder="Search">
+              </div>
+            </div>
+            <div class="latest_product_inner" style="margin-top: 20px;">
               <div class="row">
                 <% if(productCategory.length > 0) {%>
                   <% productCategory.forEach(product=> { %>
