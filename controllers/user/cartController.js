@@ -2,13 +2,21 @@ const Cart = require('../../models/cart');
 const User = require('../../models/user');
 const Product = require('../../models/product');
 
-module.exports.cart = async (req,res) => {
-    res.render('cart', {
-        req:req,
-        messages: req.flash(),
-        currentUrl: req.originalUrl,
-    })
+module.exports.cart = async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+        res.render('cart', {
+            req: req,
+            messages: req.flash(),
+            currentUrl: req.originalUrl,
+            cart: cart,
+        });
+    } catch (error) {
+        console.error('Error fetching cart:', error);
+        res.status(500).send('Internal Server Error');
+    }
 }
+
 
 module.exports.addCart = async (req, res) => {
     const productId = req.body.productId;
@@ -85,3 +93,42 @@ module.exports.addCartSingle = async (req, res) => {
     }
 };
 
+module.exports.updateCart = async (req, res) => {
+    try {
+        const itemId = req.params.itemId;
+        const quantity = parseInt(req.body.qty);
+
+        // Find the cart item by ID
+        const cartItem = await Cart.findOne({ "items._id": itemId });
+
+        // Find the product associated with the cart item
+        const product = await Product.findById(cartItem.items.find(item => item._id == itemId).productId);
+
+        // Check if the requested quantity exceeds the available stock
+        if (product.quantity < quantity) {
+            req.flash('message', 'Quantity exceeds available stock.');
+            return res.redirect(`/carts`);
+        }
+
+        // Update the quantity of the cart item
+        const updatedCartItem = await Cart.findOneAndUpdate(
+            { "items._id": itemId },
+            { $set: { "items.$.quantity": quantity } },
+            { new: true }
+        );
+
+        // Calculate subtotal
+        let subtotal = 0;
+        updatedCartItem.items.forEach(item => {
+            subtotal += item.productId.price * item.quantity;
+        });
+
+        // Redirect back to the product detail page
+        console.log('Product in cart updated');
+        req.flash('message', 'Cart updated');
+        res.redirect(`/carts`);
+    } catch (error) {
+        console.error('Error updating cart:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
