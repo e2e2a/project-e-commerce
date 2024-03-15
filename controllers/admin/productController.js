@@ -83,6 +83,20 @@ module.exports.doCreate = (request, response) => {
     });
 }
 
+module.exports.delete = async (req, res) => {
+    const productId = req.body.productId;
+    const productToDelete = await Product.findByIdAndDelete(productId);
+    if (productToDelete) {
+        console.log('product Deleted');
+        req.flash('message', 'Product Deleted!');
+        return res.redirect('/admin/product');
+    } else{
+        console.log('failed product Deleted');
+        req.flash('message', 'Product Deleted Failed!');
+        return res.redirect('/admin/product');
+    }
+}
+
 module.exports.update = async (request, response) => {
     const productId = request.params.productId
     if (request.session.userId) {

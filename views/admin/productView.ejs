@@ -70,14 +70,14 @@
                                                 <td class="align-middle text-center"><%= product.quantity %></td>
                                                 <td class="align-middle text-center"><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal<%= product._id %>">View</button></td>
                                                 <td class="align-middle text-center">
-                                                    <form action="" method="post">
-                                                        <input type="hidden" name="vehicleId" value="">
+                                                    <form action="/admin/product/delete" method="post">
+                                                        <input type="hidden" name="productId" value="<%= product._id %>">
                                                         <div class="btn-group text-center justify-content-center">
                                                             <a href="" class="btn btn-primary" data-toggle="tooltip"
                                                                 data-placement="top" title="Edit">
                                                                 <i class="zmdi zmdi-edit"></i>
                                                             </a>
-                                                            <button class="btn btn-danger" data-toggle="tooltip"
+                                                            <button type="submit" class="btn btn-danger" data-toggle="tooltip"
                                                                 data-placement="top" title="Delete">
                                                                 <i class="zmdi zmdi-delete"></i>
                                                             </button>

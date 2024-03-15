@@ -86,3 +86,17 @@ module.exports.doCreate = async (req, res) => {
         });
     }
 }
+
+module.exports.delete = async (req, res) => {
+    const userId = req.body.userId;
+    const userToDelete = await User.findByIdAndDelete(userId);
+    if (userToDelete) {
+        console.log('user Deleted');
+        req.flash('message', 'User Deleted!');
+        return res.redirect('/admin/user');
+    } else{
+        console.log('failed user Deleted');
+        req.flash('message', 'User Deleted Failed!');
+        return res.redirect('/admin/user');
+    }
+}

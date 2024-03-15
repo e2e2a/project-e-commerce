@@ -40,12 +40,14 @@ module.exports = function(app){
         })
     })
     app.get('/admin/product', adminProductController.index);
+    app.post('/admin/product/delete', adminProductController.delete);
     app.get('/admin/product/create', adminProductController.create);
     app.post('/admin/product/doCreate', adminProductController.doCreate);
     app.get('/admin/course', adminCourseController.index);
     app.get('/admin/course/create', adminCourseController.create);
     app.post('/admin/course/doCreate', adminCourseController.doCreate);
     app.get('/admin/user', adminUserController.index);
+    app.post('/admin/user/delete', adminUserController.delete);
     app.get('/admin/user/create', adminUserController.create);
     app.post('/admin/user/doCreate', adminUserController.doCreate);
     app.get('/admin/enrollment', adminEnrollmentController.index);
