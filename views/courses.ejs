@@ -27,13 +27,13 @@
     <div class="product_top_bar d-flex align-items-center mb-40">
       <div class="col-12 col-lg-6 d-flex align-items-center ">
         <label for="search" class=" col-form-label mr-2" style="font-size: 18px;font-weight: 500;">Search</label>
-        <input type="text" name="search" class="form-control" id="searchProductName" class="sorting" placeholder="Search">
+        <input type="text" name="search" class="form-control" id="searchCourseName" class="sorting" placeholder="Search">
       </div>
     </div>
     <div class="row">
       <% if(courses.length > 0) {%>
         <% courses.forEach(course=> { %>
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-4 col-md-6" id="courseToDisplay">
         <div class="single-blog">
           <div class="thumb">
             <img class="img-fluid" src="<%= course.imageURL %>" alt="" style="height: 350px;">
@@ -61,7 +61,25 @@
   </div>
 </section>
 <!--================ End Courses Area =================-->
+  <script>
+    function searchProducts() {
+        const searchQuery = document.getElementById('searchCourseName').value.trim().toLowerCase();
+        const products = document.querySelectorAll('#courseToDisplay');
 
+        products.forEach(product => {
+            const productName = product.querySelector('h4').innerText.toLowerCase();
+            if (productName.includes(searchQuery)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    }
+
+    document.getElementById('searchCourseName').addEventListener('input', function() {
+        searchProducts();
+    });
+  </script>
     <%- include('./partials/footer/footer.ejs'); %>
 
   </body>

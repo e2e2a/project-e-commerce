@@ -60,7 +60,7 @@
               <div class="row">
                 <% if(products.length > 0) {%>
                   <% products.forEach(product=> { %>
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6" id="productToDisplay">
                   <div class="single-product">
                     <div class="product-img">
                       <img class="card-img img-thumbnail" src="<%= product.imageURL %>" alt="" style="height: 300px;"/>
@@ -101,7 +101,25 @@
       </div>
     </section>
     <!--================End Category Product Area =================-->
+    <script>
+    function searchProducts() {
+        const searchQuery = document.getElementById('searchProductName').value.trim().toLowerCase();
+        const products = document.querySelectorAll('#productToDisplay');
 
+        products.forEach(product => {
+            const productName = product.querySelector('h4').innerText.toLowerCase();
+            if (productName.includes(searchQuery)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    }
+
+    document.getElementById('searchProductName').addEventListener('input', function() {
+        searchProducts();
+    });
+    </script>
     <%- include('./partials/footer/footer.ejs'); %>
 
   </body>
