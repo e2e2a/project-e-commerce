@@ -3,10 +3,10 @@ var mongoose = require("mongoose");
 var schema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', 
+        ref: 'User',
         required: true
     },
-    products: [{
+    items: [{
         productId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product',
@@ -14,9 +14,14 @@ var schema = mongoose.Schema({
         },
         quantity: {
             type: Number,
-            default: 1
-        }
-    }]
+            required: true
+        },
+        // You can include additional fields here like product name, price, etc.
+    }],
+    totalAmount: {
+        type: Number,
+        required: true
+    },
 }, {
     versionKey: false,
     timestamps: true

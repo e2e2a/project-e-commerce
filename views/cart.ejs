@@ -97,10 +97,12 @@
                     <td></td>
                     <td></td>
                     <td>
-                      <div class="checkout_btn_inner">
-                        <a class="gray_btn" href="/products">Continue Shopping</a>
-                        <a class="main_btn" href="#">Proceed to checkout</a>
-                      </div>
+                      <form action="/checkout" method="post">
+                        <div class="checkout_btn_inner">
+                          <a class="gray_btn" href="/products">Continue Shopping</a>
+                          <button type="submit" class="main_btn" href="#">Proceed to checkout</button>
+                        </div>
+                      </form>
                     </td>
                   </tr>
                 </tbody>

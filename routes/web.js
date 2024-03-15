@@ -34,6 +34,7 @@ module.exports = function(app){
     app.post('/cart', userCartController.addCart);
     app.post('/cartsingle', userCartController.addCartSingle);
     app.post('/cart/update/:itemId', userCartController.updateCart);
+    app.post('/checkout', userCartController.checkout);
     //admin
     app.get('/admin', (req,res) => {
         res.render('admin/index', {

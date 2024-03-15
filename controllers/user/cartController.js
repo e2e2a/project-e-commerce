@@ -1,31 +1,33 @@
 const Cart = require('../../models/cart');
 const User = require('../../models/user');
 const Product = require('../../models/product');
+const Order = require('../../models/order');
+const nodemailer = require('nodemailer');
 const SITE_TITLE = 'Dunamis';
+
 module.exports.cart = async (req, res) => {
     try {
         const userLogin = await User.findById(req.session.login);
-        if(userLogin){
-        const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
-        res.render('cart', {
-            req: req,
-            messages: req.flash(),
-            currentUrl: req.originalUrl,
-            cart: cart,
-            currentUrl: req.originalUrl,
-            userLogin: userLogin,
-            SITE_TITLE:SITE_TITLE,
-            title: 'Cart'
-        });
-    }else{
-        return res.redirect('/login');
-    }
+        if (userLogin) {
+            const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+            res.render('cart', {
+                req: req,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                cart: cart,
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+                SITE_TITLE: SITE_TITLE,
+                title: 'Cart'
+            });
+        } else {
+            return res.redirect('/login');
+        }
     } catch (error) {
         console.error('Error fetching cart:', error);
         res.status(500).send('Internal Server Error');
     }
 }
-
 
 module.exports.addCart = async (req, res) => {
     const productId = req.body.productId;
@@ -141,3 +143,83 @@ module.exports.updateCart = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+module.exports.checkout = async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+        if (!cart) {
+            return res.status(404).send('Cart not found');
+        }
+
+        // Calculate total amount based on items in the cart
+        let totalAmount = 0;
+        for (const item of cart.items) {
+            if (item.productId && item.productId.price) {
+                totalAmount += item.productId.price * item.quantity;
+            }
+        }
+
+        const orderItems = cart.items.map(item => ({
+            productId: item.productId._id,
+            quantity: item.quantity,
+        }));
+
+        const order = new Order({
+            userId: req.session.login,
+            items: orderItems,
+            totalAmount: totalAmount,
+        });
+
+        await order.save();
+        await Cart.deleteOne({ _id: cart._id });
+        const user = await User.findById(req.session.login)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'emonawong22@gmail.com',
+                pass: 'nouv heik zbln qkhf',
+            },
+        });
+        const sendEmail = async (from, to, subject, htmlContent) => {
+            try {
+                const mailOptions = {
+                    from,
+                    to,
+                    subject,
+                    html: htmlContent,
+                };
+                const info = await transporter.sendMail(mailOptions);
+                console.log('Email sent:', info.response);
+            } catch (error) {
+                console.error('Error sending email:', error);
+                throw new Error('Failed to send email');
+            }
+        };
+        const emailContent = `
+        <div style="background-color: #e8f5e9; padding: 20px; width: 100%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${user.fullname},</h2>
+        <p style="color: #333;">Thank you for your purchase at Dunamismusiccenter.onrender.com. Your order has been successfully placed.</p>
+        <p style="color: #333;">To ensure smooth delivery of your items, please note the following:</p>
+        <ul style="color: #333; list-style-type: none; padding-left: 20px;">
+            <li>Your total payment amount: ₱${totalAmount.toFixed(2)}</li>
+            <li>Your order will be delivered within 1 hour.</li>
+        </ul>
+        <p style="color: #333;">If you have any questions or concerns regarding your order, feel free to contact us at cherry@gmail.com.</p>
+        <p style="color: #333;">Thank you for shopping with us!</p>
+    </div>
+        `;
+        sendEmail(
+            'Dunamismusiccenter.onrender.com <cherry@gmail.com>',
+            user.email,
+            'Order Checkout',
+            emailContent
+        );
+        req.flash('message', 'Order Checkout. Please check your email');
+        return res.redirect('/carts')
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
