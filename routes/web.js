@@ -40,6 +40,8 @@ module.exports = function(app){
         })
     })
     app.get('/admin/product', adminProductController.index);
+    app.get('/admin/product/edit/:productId', adminProductController.edit);
+    app.post('/admin/product/doEdit/:productId', adminProductController.doEdit);
     app.post('/admin/product/delete', adminProductController.delete);
     app.get('/admin/product/create', adminProductController.create);
     app.post('/admin/product/doCreate', adminProductController.doCreate);

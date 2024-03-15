@@ -50,7 +50,7 @@ module.exports.doCreate = (request, response) => {
         storage: fileUpload.files.storage(),
         allowedFile: fileUpload.files.allowedFile
     }).single('image');
-    upload(request, response, function (err) {
+    upload(request, response, async function (err) {
         if (err instanceof multer.MulterError) {
             return response
                 .status(err.status || 500)
@@ -60,6 +60,11 @@ module.exports.doCreate = (request, response) => {
                 .status(err.status || 500)
                 .render('500', { err: err });
         } else {
+            const imageUrlExist = await Product.findOne({ imageURL: `/public/uploads/product/${request.file.filename}` });
+            if (imageUrlExist) {
+                request.flash('message', 'Product image is in used');
+                return response.redirect('/admin/product/create')
+            }
             const product = new Product({
                 name: request.body.name,
                 price: request.body.price,
@@ -73,6 +78,7 @@ module.exports.doCreate = (request, response) => {
                 product.imageURL = `/public/uploads/product/${request.file.filename}`;
                 await product.save();
                 console.log('success')
+                req.flash('message', 'Product Created.')
                 return response.redirect('/admin/product');
             }, (err) => {
                 return response
@@ -90,98 +96,81 @@ module.exports.delete = async (req, res) => {
         console.log('product Deleted');
         req.flash('message', 'Product Deleted!');
         return res.redirect('/admin/product');
-    } else{
+    } else {
         console.log('failed product Deleted');
         req.flash('message', 'Product Deleted Failed!');
         return res.redirect('/admin/product');
     }
 }
 
-module.exports.update = async (request, response) => {
-    const productId = request.params.productId
-    if (request.session.userId) {
-        response.redirect('product-update', {
+module.exports.edit = async (req, res) => {
+    try {
+        const productId = req.params.productId
+        const product = await Product.findById(productId)
+        res.render('admin/productEdit', {
             site_title: SITE_TITLE,
             title: 'Product Update',
             product: product,
             messages: req.flash(),
         });
-    }
-    try {
-        const product = await Product.findById(productId).exec();
-
-        if (product) {
-            response.render('product-update', {
-                site_title: SITE_TITLE,
-                title: 'Product Update',
-                product: product
-            });
-        } else {
-            //redirect to 404 page
-            return response
-                .status(err.status || 404)
-                .render('404', { err: err });
-        }
     } catch (err) {
-        //redirect to 500 page
-        return response
+        return res
             .status(err.status || 500)
             .render('500', { err: err });
     }
 }
-module.exports.doUpdate = (request, response) => {
+
+module.exports.doEdit = async (request, response) => {
+    const productId = request.params.productId;
+    const product = await Product.findById(productId);
     var upload = multer({
         storage: fileUpload.files.storage(),
         allowedFile: fileUpload.files.allowedFile
     }).single('image');
     upload(request, response, async function (err) {
         if (err instanceof multer.MulterError) {
-            // Sending the multer error to the client
             return response
                 .status(err.status || 500)
                 .render('500', { err: err });
-        } else if (err) { // If there's another kind of error (not a MulterError), then handle it here
-            // Sending the generic error to the client
+        } else if (err) {
             return response
                 .status(err.status || 500)
                 .render('500', { err: err });
-        } else { // If no errors occurred during the file upload, continue to the next step
-            const imageUrl = `/public/uploads/${request.file.filename}`;
-            const productId = request.params.productId
-            try {
-                // this is the new updated product properties
-                const updatedData = {
-                    name: request.body.name,
-                    description: request.body.description,
-                    price: request.body.price,
-                    note: request.body.note,
-                    category: request.body.category,
-                    stockQuantity: request.body.stockQuantity,
-                    imageURL: imageUrl,
-                    isAvailable: request.body.isAvailable == 'on'
-                };
-                // functions both as find (productId) and update (updateData).
-                const updatedProduct = await Product.findByIdAndUpdate(productId, updatedData, {
-                    new: true  // This option returns the updated document
-                })
-                if (updatedProduct) {
-                    // redirect back to the product page
-                    response.redirect("/product/" + updatedProduct._id);
-                } else {
-                    // redirect to 404 error Page (product-404.ejs)
-                    return response
-                        .status(404)
-                        .render('404', { err: err });
-                }
-
-            } catch (err) {
-                console.log("Error!", err);
-                // redirect to error Critical Error Page (error-500.ejs)
-                return response
-                    .status(err.status || 500)
-                    .render('500', { err: err });
+        } else {
+            let imageUrl = '';
+            if (product.imageURL) {
+                imageUrl = product.imageURL;
             }
-
+            if (request.file) {
+                imageUrl = `/public/uploads/product/${request.file.filename}`;
+                const imageUrlExist = await Product.findOne({ imageURL: `/public/uploads/product/${request.file.filename}` });
+                if (imageUrlExist) {
+                    request.flash('message', 'Product image is in used');
+                    return response.redirect(`/admin/product/edit/${product._id}`)
+                }
+            }
+            const productData = {
+                name: request.body.name,
+                price: request.body.price,
+                category: request.body.category,
+                brand: request.body.brand,
+                color: request.body.color,
+                imageURL: imageUrl,
+                quantity: request.body.quantity,
+                description: request.body.description,
+            };
+            const updatedProduct = await Product.findByIdAndUpdate(productId, productData, {
+                new: true
+            })
+            if (updatedProduct) {
+                console.log('success update');
+                request.flash('message', 'Product Updated');
+                return response.redirect('/admin/product');
+            } else {
+                return response
+                    .status(404)
+                    .render('404', { err: err });
+            }
         }
     });
 }
