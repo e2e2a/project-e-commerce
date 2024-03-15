@@ -46,6 +46,7 @@ module.exports = function(app){
     app.get('/admin/product/create', adminProductController.create);
     app.post('/admin/product/doCreate', adminProductController.doCreate);
     app.get('/admin/course', adminCourseController.index);
+    app.post('/admin/course/delete', adminCourseController.delete);
     app.get('/admin/course/create', adminCourseController.create);
     app.post('/admin/course/doCreate', adminCourseController.doCreate);
     app.get('/admin/user', adminUserController.index);
