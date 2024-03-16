@@ -1,7 +1,9 @@
-const SITE_TITLE = 'Shope';
+const SITE_TITLE = 'Dunamis';
 const User = require('../../models/user');
 const Enrollement = require('../../models/enrollment');
 const Course = require('../../models/course');
+const nodemailer = require('nodemailer');
+const enrollment = require('../../models/enrollment');
 
 module.exports.index = async (req, res) => {
     const enrollements = await Enrollement.find();
@@ -80,7 +82,44 @@ module.exports.actions = async (req, res) => {
     const formattedDate = currentDate.toISOString().split('T')[0];
     const enrollementId = req.body.enrollementId;
     if (actions === 'approved') {
-        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { isApproved: true, dateApproved: formattedDate, status: 'approved' }, { new: true });
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { isApproved: true, dateApproved: formattedDate, status: 'approved' }, { new: true }).populate('userId');
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'emonawong22@gmail.com',
+                pass: 'nouv heik zbln qkhf',
+            },
+        });
+
+        const sendEmail = async (from, to, subject, htmlContent) => {
+            try {
+                const mailOptions = {
+                    from,
+                    to,
+                    subject,
+                    html: htmlContent,
+                };
+                const info = await transporter.sendMail(mailOptions);
+                console.log('Email sent:', info.response);
+            } catch (error) {
+                console.error('Error sending email:', error);
+                return res.status(500).render('500');
+            }
+        };
+        const emailContent = `
+        <div style="background-color: #e8f5e9; padding: 20px; width: 70%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${userEnrollment.userId.fullname},</h2>
+            <p style="color: #333;">Your enrollment has been approved!</p>
+            <p style="color: #333;">Please proceed with the next steps as per the instructions provided.</p>
+        </div>
+        `;
+        sendEmail(
+            'dunamismusiccenter.onrender.com <cherry@gmail.com>',
+            `${userEnrollment.userId.email}`,
+            'Enrollment Approved',
+            emailContent
+        );
         if (userEnrollment) {
             console.log('Success enrollment approved');
             req.flash('message', 'Enrollment approved successfully!');

@@ -8,6 +8,7 @@ const userIndexController = require('../controllers/user/indexController');
 const userProductController = require('../controllers/user/productController');
 const userCourseController = require('../controllers/user/courseController');
 const userCartController = require('../controllers/user/cartController');
+const userContactController = require('../controllers/user/contactController');
 
 const authLoginController = require('../controllers/auth/loginController');
 const authRegisterController = require('../controllers/auth/registerController');
@@ -36,6 +37,9 @@ module.exports = function(app){
     app.post('/cartsingle', userCartController.addCartSingle);
     app.post('/cart/update/:itemId', userCartController.updateCart);
     app.post('/checkout', userCartController.checkout);
+    //contact
+    app.get('/contact', userContactController.index);
+    app.post('/doContact', userContactController.doContact);
     //admin
     app.get('/admin', (req,res) => {
         res.render('admin/index', {

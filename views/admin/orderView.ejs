@@ -31,7 +31,6 @@
                                             <% orders.forEach(order => { %>
                                             <tr>
                                                 <td><%= order._id %></td>
-                                                <% console.log(order.userId) %>
                                                 <td><%= order.userId?.fullname %></td> <!-- Accessing user name -->
                                                 <td>
                                                     <ul>

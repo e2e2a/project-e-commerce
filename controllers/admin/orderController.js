@@ -1,12 +1,13 @@
 // controllers/orderController.js
 const Order = require('../../models/order');
+const SITE_TITLE = 'Dunamis';
 
 module.exports.displayOrders = async (req, res) => {
     try {
         // Find all orders and populate user and product information
         const orders = await Order.find()
-            .populate('userId') // Populate the user
-            .populate('items.productId'); // Populate the product for each item
+            .populate('userId')
+            .populate('items.productId');
 
         // Render the order view with the orders data
         res.render('admin/orderView', { orders: orders });

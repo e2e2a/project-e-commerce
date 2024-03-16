@@ -1,4 +1,4 @@
-const SITE_TITLE = 'Shope';
+const SITE_TITLE = 'Dunamis';
 const multer = require('multer');
 const Product = require('../../models/product');
 var fileUpload = require('../../middlewares/product-upload-middleware');

@@ -1,4 +1,4 @@
-const SITE_TITLE = 'Shope';
+const SITE_TITLE = 'Dunamis';
 const User = require('../../models/user');
 var bcrypt = require("bcrypt");
 
