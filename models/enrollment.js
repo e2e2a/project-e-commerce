@@ -15,6 +15,9 @@ var schema = mongoose.Schema({
     name: {
         type: String,
     },
+    email: {
+        type: String,
+    },
     address: {
         type: String,
     },

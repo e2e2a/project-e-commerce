@@ -51,11 +51,13 @@ module.exports.doEnroll = async (req, res) => {
     if (!existingEnrollment || existingEnrollment.status === 'done' || existingEnrollment.status === 'cancelled') {
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().split('T')[0];
+        const userLogin = await User.findById(req.session.login);
         const enroll = new Enroll({
             userId: req.session.login,
             courseId: req.body.courseId,
             courseTitle: course.title,
             name: req.body.name,
+            email: userLogin.email,
             address: req.body.address,
             placeDeath: req.body.placeDeath,
             age: req.body.age,

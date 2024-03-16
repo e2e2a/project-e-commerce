@@ -47,6 +47,7 @@ module.exports.doCreate = async (req, res) => {
                 userId: req.session.login,
                 courseTitle: req.body.courseTitle,
                 name: req.body.name,
+                email: req.body.email,
                 address: req.body.address,
                 placeDeath: req.body.placeDeath,
                 age: req.body.age,
@@ -116,7 +117,7 @@ module.exports.actions = async (req, res) => {
         `;
         sendEmail(
             'dunamismusiccenter.onrender.com <cherry@gmail.com>',
-            `${userEnrollment.userId.email}`,
+            `${userEnrollment.email}`,
             'Enrollment Approved',
             emailContent
         );
@@ -130,7 +131,43 @@ module.exports.actions = async (req, res) => {
             return res.redirect('/admin/enrollment');
         }
     } else if (actions === 'disapproved') {
-        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { isApproved: true, dateDisapproved: formattedDate, status: 'disapproved' }, { new: true });
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { isApproved: true, dateDisapproved: formattedDate, status: 'disapproved' }, { new: true }).populate('userId');
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'emonawong22@gmail.com',
+                pass: 'nouv heik zbln qkhf',
+            },
+        });
+
+        const sendEmail = async (from, to, subject, htmlContent) => {
+            try {
+                const mailOptions = {
+                    from,
+                    to,
+                    subject,
+                    html: htmlContent,
+                };
+                const info = await transporter.sendMail(mailOptions);
+                console.log('Email sent:', info.response);
+            } catch (error) {
+                console.error('Error sending email:', error);
+                return res.status(500).render('500');
+            }
+        };
+        const emailContent = `
+        <div style="background-color: #e8f5e9; padding: 20px; width: 70%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${userEnrollment.userId.fullname},</h2>
+            <p style="color: #333;">We are very sorry to inform you that your enrollment has been disapproved.</p>
+            <p style="color: #333;">Please feel free to contact us if you have any questions or concerns.</p>
+        </div>
+        `;
+        sendEmail(
+            'dunamismusiccenter.onrender.com <cherry@gmail.com>',
+            `${userEnrollment.email}`,
+            'Enrollment Approved',
+            emailContent
+        );
         if (userEnrollment) {
             console.log('Enrollment Disapproved');
             req.flash('message', 'Enrollment Disapproved successfully!');
@@ -252,6 +289,7 @@ module.exports.doEdit = async (req, res) => {
             courseId: req.body.courseId,
             courseTitle: req.body.courseTitle,
             name: req.body.name,
+            email: req.body.email,
             address: req.body.address,
             placeDeath: req.body.placeDeath,
             age: req.body.age,
