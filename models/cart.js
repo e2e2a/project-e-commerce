@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-mongoose.set('debug', true);
 var schema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
