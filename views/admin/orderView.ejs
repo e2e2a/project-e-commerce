@@ -31,16 +31,15 @@
                                             <% orders.forEach(order => { %>
                                             <tr>
                                                 <td><%= order._id %></td>
-                                                <td><%= order.userId?.fullname %></td> <!-- Accessing user name -->
+                                                <td><%= order.userId?.fullname %></td>
                                                 <td>
                                                     <ul>
                                                         <% order.items.forEach(item => { %>
-                                                        <li><%= item.productId.name %> - <%= item.productId.price %></li> <!-- Accessing product name and price -->
+                                                        <li><%= item.productId.name %>(<%= item.quantity %>) - <%= item.productId.price %></li>
                                                         <% }); %>
                                                     </ul>
                                                 </td>
-                                                <td><%= order.totalAmount %></td> <!-- Using totalAmount instead of total -->
-                                                <!-- Display other order fields as needed -->
+                                                <td>₱<%= order.totalAmount %></td> 
                                             </tr>
                                             <% }); %>
                                         </tbody>

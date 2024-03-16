@@ -3,7 +3,6 @@ const User = require('../../models/user');
 const Enrollement = require('../../models/enrollment');
 const Course = require('../../models/course');
 const nodemailer = require('nodemailer');
-const enrollment = require('../../models/enrollment');
 
 module.exports.index = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
