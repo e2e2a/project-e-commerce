@@ -2,6 +2,7 @@ const adminProductController = require('../controllers/admin/productController')
 const adminCourseController = require('../controllers/admin/courseController');
 const adminUserController = require('../controllers/admin/userController');
 const adminEnrollmentController = require('../controllers/admin/enrollmentController');
+const adminOrderController = require('../controllers/admin/orderController');
 
 const userIndexController = require('../controllers/user/indexController');
 const userProductController = require('../controllers/user/productController');
@@ -71,4 +72,5 @@ module.exports = function(app){
     app.post('/admin/enrollment/deleteDisapproved', adminEnrollmentController.deleteDisapproved);
     app.get('/admin/enrollment/done', adminEnrollmentController.statusDone);
     app.post('/admin/enrollment/deleteDone', adminEnrollmentController.deleteDone);
+    app.get('/admin/order', adminOrderController.displayOrders);
 }

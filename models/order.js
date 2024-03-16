@@ -16,7 +16,6 @@ var schema = mongoose.Schema({
             type: Number,
             required: true
         },
-        // You can include additional fields here like product name, price, etc.
     }],
     totalAmount: {
         type: Number,
