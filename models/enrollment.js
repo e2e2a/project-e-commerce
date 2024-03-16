@@ -59,7 +59,8 @@ var schema = mongoose.Schema({
         type: String,
     },
     isApproved: {
-        type: String,
+        type: Boolean, 
+        default: false 
     },
     status: {
         type: String,

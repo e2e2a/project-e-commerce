@@ -63,7 +63,7 @@
                                         <tbody>
                                             <% if(enrollements.length > 0) {%>
                                                 <% enrollements.forEach(enrollement=> { %>
-                                                    <% if(enrollement.isApproved === 'false') {%>
+                                                    <% if(enrollement.isApproved === false) {%>
                                             <tr>
                                                 <td><%= enrollement._id %></td>
                                                 <td><%= enrollement.courseTitle %></td>

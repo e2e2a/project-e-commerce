@@ -3,31 +3,44 @@ const User = require('../../models/user');
 var bcrypt = require("bcrypt");
 
 module.exports.index = async (req, res) => {
-    const users = await User.find();
-    if (req.session.login) {
-        res.render('admin/userView', {
-            site_title: SITE_TITLE,
-            title: 'User',
-            users: users,
-            messages: req.flash(),
-        });
+    const userLogin = await User.findById(req.session.login);
+    if (condition) {
+        if (condition) {
+            const users = await User.find();
+            res.render('admin/userView', {
+                site_title: SITE_TITLE,
+                title: 'User',
+                users: users,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+            });
+        } else {
+            return res.status(404).render('404');
+        }
     } else {
-        res.render('admin/userView', {
-            site_title: SITE_TITLE,
-            title: 'User',
-            users: users,
-            messages: req.flash(),
-        });
+        return res.redirect('/login');
     }
 }
 
 module.exports.create = async (req, res) => {
-    res.render('admin/userCreate', {
-        site_title: SITE_TITLE,
-        title: 'User',
-        req: req,
-        messages: req.flash(),
-    });
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            res.render('admin/userCreate', {
+                site_title: SITE_TITLE,
+                title: 'User',
+                req: req,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+            });
+        } else {
+            return res.status(404).render('404');
+        }
+    } else {
+        return res.redirect('/login');
+    }
 }
 
 module.exports.doCreate = async (req, res) => {
@@ -93,15 +106,26 @@ module.exports.doCreate = async (req, res) => {
 }
 
 module.exports.edit = async (req, res) => {
-    const userId = req.params.id;
-    const user = await User.findById(userId)
-    res.render('admin/userEdit', {
-        site_title: SITE_TITLE,
-        title: 'User',
-        req: req,
-        messages: req.flash(),
-        user: user
-    });
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            const userId = req.params.id;
+            const user = await User.findById(userId)
+            res.render('admin/userEdit', {
+                site_title: SITE_TITLE,
+                title: 'User',
+                req: req,
+                messages: req.flash(),
+                user: user,
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+            });
+        } else {
+            return res.status(404).render('404');
+        }
+    } else {
+        return res.redirect('/login');
+    }
 }
 
 module.exports.doEdit = async (req, res) => {

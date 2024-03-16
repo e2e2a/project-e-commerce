@@ -69,7 +69,7 @@ module.exports.doEnroll = async (req, res) => {
             schedule: req.body.schedule,
             time: req.body.time,
             dateEnrolling: formattedDate,
-            isApproved: 'false',
+            isApproved: false,
         });
         await enroll.save();
         console.log('success enrollment');

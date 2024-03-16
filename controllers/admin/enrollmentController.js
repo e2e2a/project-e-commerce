@@ -6,31 +6,45 @@ const nodemailer = require('nodemailer');
 const enrollment = require('../../models/enrollment');
 
 module.exports.index = async (req, res) => {
-    const enrollements = await Enrollement.find();
-    if (req.session.login) {
-        res.render('admin/enrollmentView', {
-            site_title: SITE_TITLE,
-            title: 'Enrollment',
-            enrollements: enrollements,
-            messages: req.flash(),
-        });
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            const enrollements = await Enrollement.find();
+                res.render('admin/enrollmentView', {
+                    site_title: SITE_TITLE,
+                    title: 'Enrollment',
+                    enrollements: enrollements,
+                    messages: req.flash(),
+                    currentUrl: req.originalUrl,
+                    userLogin:userLogin,
+                });
+        } else {
+            return res.status(404).render('404');
+        }
     } else {
-        res.render('admin/enrollmentView', {
-            site_title: SITE_TITLE,
-            title: 'Enrollment',
-            enrollements: enrollements,
-            messages: req.flash(),
-        });
+        return res.redirect('/login');
     }
 }
 
 module.exports.create = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
-    res.render('admin/enrollmentCreate', {
-        req: req,
-        messages: req.flash(),
-        userLogin: userLogin,
-    });
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            res.render('admin/enrollmentCreate', {
+                req: req,
+                site_title: SITE_TITLE,
+                title: 'Enrollment',
+                messages: req.flash(),
+                userLogin: userLogin,
+                currentUrl: req.originalUrl,
+            });
+        } else {
+            return res.status(404).render('404');
+        }
+    } else {
+        return res.redirect('/login')
+    }
+
 }
 
 module.exports.doCreate = async (req, res) => {
@@ -59,7 +73,7 @@ module.exports.doCreate = async (req, res) => {
                 schedule: req.body.schedule,
                 time: req.body.time,
                 dateEnrolling: formattedDate,
-                isApproved: 'false',
+                isApproved: false,
             });
             await enroll.save();
             console.log('success enrollment');
@@ -110,7 +124,7 @@ module.exports.actions = async (req, res) => {
         };
         const emailContent = `
         <div style="background-color: #e8f5e9; padding: 20px; width: 70%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
-            <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${userEnrollment.userId.fullname},</h2>
+            <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${userEnrollment.name},</h2>
             <p style="color: #333;">Your enrollment has been approved!</p>
             <p style="color: #333;">Please proceed with the next steps as per the instructions provided.</p>
         </div>
@@ -157,7 +171,7 @@ module.exports.actions = async (req, res) => {
         };
         const emailContent = `
         <div style="background-color: #e8f5e9; padding: 20px; width: 70%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
-            <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${userEnrollment.userId.fullname},</h2>
+            <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${userEnrollment.name},</h2>
             <p style="color: #333;">We are very sorry to inform you that your enrollment has been disapproved.</p>
             <p style="color: #333;">Please feel free to contact us if you have any questions or concerns.</p>
         </div>
@@ -181,42 +195,153 @@ module.exports.actions = async (req, res) => {
 }
 
 module.exports.statusApproved = async (req, res) => {
-    const enrollements = await Enrollement.find();
     const userLogin = await User.findById(req.session.login);
-    res.render('admin/enrollmentApproved', {
-        site_title: SITE_TITLE,
-        title: 'Enrollment',
-        req: req,
-        messages: req.flash(),
-        userLogin: userLogin,
-        enrollements: enrollements
-    });
-}
-module.exports.deleteApproved = async (req, res) => {
-    const enrollementId = req.body.enrollementId;
-    const enrollementToDelete = await Enrollement.findByIdAndDelete(enrollementId);
-    if (enrollementToDelete) {
-        console.log('enrollment Deleted');
-        req.flash('message', 'Enrollment Deleted!');
-        return res.redirect('/admin/enrollment/approved');
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            const enrollements = await Enrollement.find();
+            res.render('admin/enrollmentApproved', {
+                site_title: SITE_TITLE,
+                title: 'Enrollment',
+                req: req,
+                messages: req.flash(),
+                userLogin: userLogin,
+                enrollements: enrollements,
+                currentUrl: req.originalUrl,
+            });
+        } else {
+            return res.status(404).render('404');
+        }
     } else {
-        console.log('failed enrollment Deleted');
-        req.flash('message', 'Enrollment Deleted Failed!');
-        return res.redirect('/admin/enrollment/approved');
+        return res.redirect('/login')
+    }
+}
+module.exports.statusApprovedActions = async (req, res) => {
+    const actions = req.body.actions;
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0];
+    const enrollementId = req.body.enrollementId;
+    if (actions === 'done') {
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { dateEnd: formattedDate, status: 'done' }, { new: true }).populate('userId');
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'emonawong22@gmail.com',
+                pass: 'nouv heik zbln qkhf',
+            },
+        });
+
+        const sendEmail = async (from, to, subject, htmlContent) => {
+            try {
+                const mailOptions = {
+                    from,
+                    to,
+                    subject,
+                    html: htmlContent,
+                };
+                const info = await transporter.sendMail(mailOptions);
+                console.log('Email sent:', info.response);
+            } catch (error) {
+                console.error('Error sending email:', error);
+                return res.status(500).render('500');
+            }
+        };
+        const emailContent = `
+        <div style="background-color: #e8f5e9; padding: 20px; width: 70%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${userEnrollment.name},</h2>
+            <p style="color: #333;">We are pleased to inform you that your contract has been successfully completed!</p>
+            <p style="color: #333;">All terms and conditions have been fulfilled, and the contract is now marked as done.</p>
+            <p style="color: #333;">If you have any questions or need further assistance, please feel free to contact us.</p>
+            <p style="color: #333;">Thank you for choosing our services. We appreciate your business and look forward to future opportunities to work together.</p>
+        </div>
+        `;
+        sendEmail(
+            'dunamismusiccenter.onrender.com <cherry@gmail.com>',
+            `${userEnrollment.email}`,
+            'Enrollment Approved',
+            emailContent
+        );
+        if (userEnrollment) {
+            console.log('Success enrollment approved');
+            req.flash('message', 'Enrollment approved successfully!');
+            return res.redirect('/admin/enrollment');
+        } else {
+            console.log('Failed enrollment approved');
+            req.flash('message', 'Enrollment approved Failed!');
+            return res.redirect('/admin/enrollment');
+        }
+    } else if (actions === 'cancel') {
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { isApproved: false }, { new: true }).populate('userId');
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'emonawong22@gmail.com',
+                pass: 'nouv heik zbln qkhf',
+            },
+        });
+
+        const sendEmail = async (from, to, subject, htmlContent) => {
+            try {
+                const mailOptions = {
+                    from,
+                    to,
+                    subject,
+                    html: htmlContent,
+                };
+                const info = await transporter.sendMail(mailOptions);
+                console.log('Email sent:', info.response);
+            } catch (error) {
+                console.error('Error sending email:', error);
+                return res.status(500).render('500');
+            }
+        };
+        const emailContent = `
+        <div style="background-color: #e8f5e9; padding: 20px; width: 70%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${userEnrollment.name},</h2>
+            <p style="color: #333;">We regret to inform you that your enrollment has been cancelled.</p>
+            <p style="color: #333;">Due to certain reasons, we have had to cancel your enrollment for the course.</p>
+            <p style="color: #333;">We apologize for any inconvenience this may cause you.</p>
+            <p style="color: #333;">If you have any questions or concerns regarding this cancellation, please do not hesitate to contact us.</p>
+        </div>
+        `;
+        sendEmail(
+            'dunamismusiccenter.onrender.com <cherry@gmail.com>',
+            `${userEnrollment.email}`,
+            'Enrollment Approved',
+            emailContent
+        );
+        if (userEnrollment) {
+            console.log('Enrollment Disapproved');
+            req.flash('message', 'Enrollment Disapproved successfully!');
+            return res.redirect('/admin/enrollment');
+        } else {
+            console.log('Failed enrollment Disapproved');
+            req.flash('message', 'Enrollment Disapproved Failed!');
+            return res.redirect('/admin/enrollment');
+        }
     }
 }
 
 module.exports.statusDisapproved = async (req, res) => {
-    const enrollements = await Enrollement.find();
     const userLogin = await User.findById(req.session.login);
-    res.render('admin/enrollmentDisapproved', {
-        site_title: SITE_TITLE,
-        title: 'Enrollment',
-        req: req,
-        messages: req.flash(),
-        userLogin: userLogin,
-        enrollements: enrollements
-    });
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            const enrollements = await Enrollement.find();
+            res.render('admin/enrollmentDisapproved', {
+                site_title: SITE_TITLE,
+                title: 'Enrollment',
+                req: req,
+                messages: req.flash(),
+                userLogin: userLogin,
+                enrollements: enrollements,
+                currentUrl: req.originalUrl,
+            });
+        } else {
+            return res.status(404).render('404')
+        }
+    } else {
+        return res.redirect('/login')
+    }
 }
 module.exports.deleteDisapproved = async (req, res) => {
     const enrollementId = req.body.enrollementId;
@@ -233,16 +358,25 @@ module.exports.deleteDisapproved = async (req, res) => {
 }
 
 module.exports.statusDone = async (req, res) => {
-    const enrollements = await Enrollement.find();
     const userLogin = await User.findById(req.session.login);
-    res.render('admin/enrollmentDone', {
-        site_title: SITE_TITLE,
-        title: 'Enrollment',
-        req: req,
-        messages: req.flash(),
-        userLogin: userLogin,
-        enrollements: enrollements
-    });
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            const enrollements = await Enrollement.find();
+            res.render('admin/enrollmentDone', {
+                site_title: SITE_TITLE,
+                title: 'Enrollment',
+                req: req,
+                messages: req.flash(),
+                userLogin: userLogin,
+                enrollements: enrollements,
+                currentUrl: req.originalUrl,
+            });
+        } else {
+            return res.status(404).render('404')
+        }
+    } else {
+        return res.redirect('/login')
+    }
 }
 
 module.exports.deleteDone = async (req, res) => {
@@ -260,19 +394,30 @@ module.exports.deleteDone = async (req, res) => {
 }
 
 module.exports.edit = async (req, res) => {
-    try {
-        const enrollmentId = req.params.enrollmentId
-        const enrollment = await Enrollement.findById(enrollmentId)
-        res.render('admin/enrollmentEdit', {
-            site_title: SITE_TITLE,
-            title: 'Enrollment Update',
-            enrollment: enrollment,
-            messages: req.flash(),
-        });
-    } catch (err) {
-        return res
-            .status(err.status || 500)
-            .render('500', { err: err });
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            try {
+                const enrollmentId = req.params.enrollmentId
+                const enrollment = await Enrollement.findById(enrollmentId)
+                res.render('admin/enrollmentEdit', {
+                    site_title: SITE_TITLE,
+                    title: 'Enrollment Update',
+                    enrollment: enrollment,
+                    messages: req.flash(),
+                    userLogin: userLogin,
+                    currentUrl: req.originalUrl,
+                });
+            } catch (err) {
+                return res
+                    .status(err.status || 500)
+                    .render('500', { err: err });
+            }
+        } else {
+            return res.status(404).render('404')
+        }
+    } else {
+        return res.redirect('/login')
     }
 }
 

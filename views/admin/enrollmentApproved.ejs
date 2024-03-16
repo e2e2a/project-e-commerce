@@ -80,12 +80,16 @@
                                                 <td><%= enrollement.dateEnrolling %></td>
                                                 <td><%= enrollement.dateApproved %></td>
                                                 <td class="align-middle text-center">
-                                                    <form action="/admin/enrollment/deleteApproved" method="post">
+                                                    <form action="/admin/enrollment/statusApprovedActions" method="post">
                                                         <input type="hidden" name="enrollementId" value="<%= enrollement._id %>">
                                                         <div class="btn-group text-center justify-content-center">
-                                                            <button type="submit" name="submit" class="btn btn-danger" data-toggle="tooltip"
-                                                                data-placement="top" title="Delete">
-                                                                <i class="zmdi zmdi-delete"></i>
+                                                            <button type="submit" name="actions" value="done" class="btn btn-success" data-toggle="tooltip"
+                                                                data-placement="top" title="Done Contract">
+                                                                <i class="zmdi zmdi-check"></i>
+                                                            </button>
+                                                            <button type="submit" name="actions" value="cancel" class="btn btn-danger" data-toggle="tooltip"
+                                                                data-placement="top" title="Cancel">
+                                                                <i class="zmdi zmdi-close"></i>
                                                             </button>
                                                         </div>
                                                     </form>

@@ -1,33 +1,47 @@
 const SITE_TITLE = 'Dunamis';
 const multer = require('multer');
 const Course = require('../../models/course');
+const User = require('../../models/user');
 var fileUpload = require('../../middlewares/course-upload-middleware');
 module.exports.index = async (req, res) => {
-    const courses = await Course.find();
-    if (req.session.login) {
-        res.render('admin/courseView', {
-            site_title: SITE_TITLE,
-            title: 'Courses',
-            courses: courses,
-            req: req,
-            messages: req.flash(),
-        });
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            const courses = await Course.find();
+            res.render('admin/courseView', {
+                site_title: SITE_TITLE,
+                title: 'Courses',
+                courses: courses,
+                req: req,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+            });
+        } else {
+            return res.status(404).render('404');
+        }
     } else {
-        res.render('admin/courseView', {
-            site_title: SITE_TITLE,
-            title: 'Courses',
-            courses: courses,
-            req: req,
-            messages: req.flash(),
-        });
+        return res.redirect('/login');
     }
 }
 
-module.exports.create = (req, res) => {
-    res.render('admin/courseCreate', {
-        req: req,
-        messages: req.flash(),
-    })
+module.exports.create = async (req, res) => {
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            res.render('admin/courseCreate', {
+                req: req,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+            })
+        } else {
+            return res.status(404).render('404');
+        }
+    } else {
+        return res.redirect('/login');
+    }
+
 };
 
 module.exports.doCreate = (req, res) => {
@@ -87,19 +101,30 @@ module.exports.delete = async (req, res) => {
 }
 
 module.exports.edit = async (req, res) => {
-    try {
-        const courseId = req.params.courseId
-        const course = await Course.findById(courseId)
-        res.render('admin/courseEdit', {
-            site_title: SITE_TITLE,
-            title: 'Course Update',
-            course: course,
-            messages: req.flash(),
-        });
-    } catch (err) {
-        return res
-            .status(err.status || 500)
-            .render('500', { err: err });
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            try {
+                const courseId = req.params.courseId
+                const course = await Course.findById(courseId)
+                res.render('admin/courseEdit', {
+                    site_title: SITE_TITLE,
+                    title: 'Course Update',
+                    course: course,
+                    messages: req.flash(),
+                    currentUrl: req.originalUrl,
+                    userLogin: userLogin,
+                });
+            } catch (err) {
+                return res
+                    .status(err.status || 500)
+                    .render('500', { err: err });
+            }
+        } else {
+            return res.status(404).render('404');
+        }
+    } else {
+        return res.redirect('/login');
     }
 }
 

@@ -1,48 +1,48 @@
 const SITE_TITLE = 'Dunamis';
 const multer = require('multer');
 const Product = require('../../models/product');
+const User = require('../../models/user');
 var fileUpload = require('../../middlewares/product-upload-middleware');
 
 module.exports.index = async (req, res) => {
-    const products = await Product.find();
-    if (req.session.login) {
-        res.render('admin/productView', {
-            site_title: SITE_TITLE,
-            title: 'Product',
-            products: products,
-            messages: req.flash(),
-        });
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            const products = await Product.find();
+            res.render('admin/productView', {
+                site_title: SITE_TITLE,
+                title: 'Product',
+                products: products,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+            });
+        } else {
+            return res.status(404).render('404');
+        }
     } else {
-        res.render('admin/productView', {
-            site_title: SITE_TITLE,
-            title: 'Product',
-            products: products,
-            messages: req.flash(),
-        });
+        return res.redirect('/login');
     }
 }
 
-module.exports.details = (request, response) => {
-    if (request.session.userId) {
-        response.redirect('product-details', {
-            site_title: SITE_TITLE,
-            title: 'Product-details',
-            messages: req.flash(),
-        });
+module.exports.create = async (req, res) => {
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            res.render('admin/productCreate', {
+                site_title: SITE_TITLE,
+                title: 'Create',
+                req: req,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+            })
+        } else {
+            return res.status(404).render('404');
+        }
     } else {
-        response.render('product-details', {
-            site_title: SITE_TITLE,
-            title: 'Product-details',
-            messages: req.flash(),
-        });
+        return res.redirect('/login');
     }
-};
-
-module.exports.create = (req, res) => {
-    res.render('admin/productCreate', {
-        req: req,
-        messages: req.flash(),
-    })
 };
 
 module.exports.doCreate = (request, response) => {
@@ -104,19 +104,29 @@ module.exports.delete = async (req, res) => {
 }
 
 module.exports.edit = async (req, res) => {
-    try {
-        const productId = req.params.productId
-        const product = await Product.findById(productId)
-        res.render('admin/productEdit', {
-            site_title: SITE_TITLE,
-            title: 'Product Update',
-            product: product,
-            messages: req.flash(),
-        });
-    } catch (err) {
-        return res
-            .status(err.status || 500)
-            .render('500', { err: err });
+    const userLogin = await User.findById(req.session.login);
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
+            try {
+                const productId = req.params.productId
+                const product = await Product.findById(productId)
+                res.render('admin/productEdit', {
+                    site_title: SITE_TITLE,
+                    title: 'Product Update',
+                    product: product,
+                    messages: req.flash(),
+                    userLogin: userLogin,
+                });
+            } catch (err) {
+                return res
+                    .status(err.status || 500)
+                    .render('500', { err: err });
+            }
+        } else {
+            return res.status(404).render('404');
+        }
+    } else {
+        return res.redirect('/login');
     }
 }
 
