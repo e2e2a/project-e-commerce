@@ -19,7 +19,7 @@ module.exports.index = async (req, res) => {
                     userLogin:userLogin,
                 });
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login');
@@ -39,7 +39,7 @@ module.exports.create = async (req, res) => {
                 currentUrl: req.originalUrl,
             });
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login')
@@ -209,7 +209,7 @@ module.exports.statusApproved = async (req, res) => {
                 currentUrl: req.originalUrl,
             });
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login')
@@ -337,7 +337,7 @@ module.exports.statusDisapproved = async (req, res) => {
                 currentUrl: req.originalUrl,
             });
         } else {
-            return res.status(404).render('404')
+            return res.status(404).render('404',{userLogin:userLogin})
         }
     } else {
         return res.redirect('/login')
@@ -372,7 +372,7 @@ module.exports.statusDone = async (req, res) => {
                 currentUrl: req.originalUrl,
             });
         } else {
-            return res.status(404).render('404')
+            return res.status(404).render('404',{userLogin:userLogin})
         }
     } else {
         return res.redirect('/login')
@@ -414,7 +414,7 @@ module.exports.edit = async (req, res) => {
                     .render('500', { err: err });
             }
         } else {
-            return res.status(404).render('404')
+            return res.status(404).render('404',{userLogin:userLogin})
         }
     } else {
         return res.redirect('/login')

@@ -8,7 +8,6 @@ module.exports.index = async (req, res) => {
     const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
     const userLogin = await User.findById(req.session.login);
         res.render('index', {
-            req: req,
             site_title: SITE_TITLE,
             title: 'Home',
             req: req,

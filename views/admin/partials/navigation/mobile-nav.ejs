@@ -5,17 +5,23 @@
         </a>
     </div>
     <div class="menu-sidebar2__content js-scrollbar2">
-        <div class="account2">
-            <h4 class="name">Reymond Godoy</h4>
-            <a href="#">Sign out</a>
-        </div>
+        <% function activeClass(link) {
+            return currentUrl === link ? 'active' : '';
+        } %>
+        <form action="/logout" method="post">
+            <div class="account2">
+                <h4 class="name"><%= userLogin.fullname %></h4>
+                <a href="/admin/profile" class="btn btn-link text-secondary">Profile</a>
+                <button class="btn btn-link text-secondary">Sign out</button>
+            </div>
+        </form>
         <nav class="navbar-sidebar2">
             <ul class="list-unstyled navbar__list">
-                <li>
+                <li class="<%= activeClass('/admin') %>">
                     <a href="/admin">
                         <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                 </li>
-                <li class="active has-sub">
+                <li class="has-sub <%= activeClass('/admin/product') %> <%= activeClass('/admin/product/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Products
                         <span class="arrow">
@@ -33,7 +39,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="active has-sub">
+                <li class="has-sub <%= activeClass('/admin/order') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Orders
                         <span class="arrow">
@@ -42,12 +48,12 @@
                     </a>
                     <ul class="list-unstyled navbar__sub-list js-sub-list">
                         <li>
-                            <a href="">
+                            <a href="/admin/order">
                                 <i class="fas fa-tachometer-alt"></i>Orders List</a>
                         </li>
                     </ul>
                 </li>
-                <li class="active has-sub">
+                <li class="has-sub <%= activeClass('/admin/course') %> <%= activeClass('/admin/course/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Courses
                         <span class="arrow">
@@ -65,7 +71,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="active has-sub">
+                <li class="has-sub <%= activeClass('/admin/enrollment') %> <%= activeClass('/admin/enrollment/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Enrollment
                         <span class="arrow">
@@ -83,7 +89,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="active has-sub">
+                <li class="has-sub <%= activeClass('/admin/enrollment/approved') %> <%= activeClass('/admin/enrollment/disapproved') %> <%= activeClass('/admin/enrollment/done') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Enrollment Status
                         <span class="arrow">
@@ -105,7 +111,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="active has-sub">
+                <li class="has-sub <%= activeClass('/admin/user') %> <%= activeClass('/admin/user/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>User
                         <span class="arrow">

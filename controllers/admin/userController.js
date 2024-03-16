@@ -4,8 +4,8 @@ var bcrypt = require("bcrypt");
 
 module.exports.index = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
-    if (condition) {
-        if (condition) {
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
             const users = await User.find();
             res.render('admin/userView', {
                 site_title: SITE_TITLE,
@@ -16,7 +16,7 @@ module.exports.index = async (req, res) => {
                 userLogin: userLogin,
             });
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login');
@@ -36,7 +36,7 @@ module.exports.create = async (req, res) => {
                 userLogin: userLogin,
             });
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login');
@@ -121,7 +121,7 @@ module.exports.edit = async (req, res) => {
                 userLogin: userLogin,
             });
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login');

@@ -1,3 +1,4 @@
+const adminIndexController = require('../controllers/admin/indexController');
 const adminProductController = require('../controllers/admin/productController');
 const adminCourseController = require('../controllers/admin/courseController');
 const adminUserController = require('../controllers/admin/userController');
@@ -9,10 +10,12 @@ const userProductController = require('../controllers/user/productController');
 const userCourseController = require('../controllers/user/courseController');
 const userCartController = require('../controllers/user/cartController');
 const userContactController = require('../controllers/user/contactController');
+const userProfileController = require('../controllers/user/profileController');
 
 const authLoginController = require('../controllers/auth/loginController');
 const authRegisterController = require('../controllers/auth/registerController');
 const authVerifyController = require('../controllers/auth/verifyController');
+const authVerifyEdiController = require('../controllers/auth/verifyEditController');
 const authLogoutController = require('../controllers/auth/logoutController');
 module.exports = function(app){
     app.get('/login', authLoginController.login);
@@ -22,6 +25,9 @@ module.exports = function(app){
     app.post('/doRegister', authRegisterController.doRegister);
     app.get('/verify', authVerifyController.verify);
     app.post('/doVerify', authVerifyController.doVerify);
+    app.get('/verifyEdit', authVerifyEdiController.verify);
+    app.post('/verifyDoEdit', authVerifyEdiController.doVerify);
+    
     //products
     app.get('/', userIndexController.index);
     app.get('/products', userProductController.index);
@@ -40,12 +46,11 @@ module.exports = function(app){
     //contact
     app.get('/contact', userContactController.index);
     app.post('/doContact', userContactController.doContact);
+    //profile
+    app.get('/profile', userProfileController.index);
+    app.post('/profile/edit', userProfileController.doEdit);
     //admin
-    app.get('/admin', (req,res) => {
-        res.render('admin/index', {
-            req:req
-        })
-    })
+    app.get('/admin', adminIndexController.index)
     app.get('/admin/product', adminProductController.index);
     app.get('/admin/product/edit/:productId', adminProductController.edit);
     app.post('/admin/product/doEdit/:productId', adminProductController.doEdit);

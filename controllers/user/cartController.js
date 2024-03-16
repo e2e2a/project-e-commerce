@@ -17,7 +17,7 @@ module.exports.cart = async (req, res) => {
                 cart: cart,
                 currentUrl: req.originalUrl,
                 userLogin: userLogin,
-                SITE_TITLE: SITE_TITLE,
+                site_title: SITE_TITLE,
                 title: 'Cart'
             });
         } else {
@@ -164,7 +164,6 @@ module.exports.updateCart = async (req, res) => {
         }
     }
 };
-
 
 module.exports.checkout = async (req, res) => {
     try {

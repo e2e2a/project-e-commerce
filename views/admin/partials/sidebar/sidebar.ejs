@@ -1,4 +1,7 @@
 <!-- MENU SIDEBAR-->
+<% function activeClass(link) {
+    return currentUrl === link ? 'active' : '';
+} %>
 <aside class="menu-sidebar2">
     <div class="logo justify-content-center">
         <a href="">
@@ -7,16 +10,18 @@
     </div>
     <div class="menu-sidebar2__content js-scrollbar1">
             <form action="/logout" method="post" class="account2">
-                <h4 class="name">Reymond Godoy</h4>
+                <h4 class="name"><%= userLogin.fullname %></h4>
+                <a href="/admin/profile" class="btn btn-link text-secondary m-0">Profile</a>
                 <button type="submit" class="btn btn-link text-secondary">Sign out</button>
             </form>
         <nav class="navbar-sidebar2">
+            
             <ul class="list-unstyled navbar__list">
-                <li>
+                <li class="<%= activeClass('/admin') %>">
                     <a href="/admin">
                         <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                 </li>
-                <li class="has-sub">
+                <li class="has-sub <%= activeClass('/admin/product') %> <%= activeClass('/admin/product/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Products
                         <span class="arrow">
@@ -34,7 +39,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="has-sub">
+                <li class="has-sub <%= activeClass('/admin/order') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Orders
                         <span class="arrow">
@@ -48,7 +53,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="has-sub">
+                <li class="has-sub <%= activeClass('/admin/course') %> <%= activeClass('/admin/course/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Courses
                         <span class="arrow">
@@ -66,7 +71,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="has-sub">
+                <li class="has-sub <%= activeClass('/admin/enrollment') %> <%= activeClass('/admin/enrollment/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Enrollment
                         <span class="arrow">
@@ -84,7 +89,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="has-sub">
+                <li class="has-sub <%= activeClass('/admin/enrollment/approved') %> <%= activeClass('/admin/enrollment/disapproved') %> <%= activeClass('/admin/enrollment/done') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Enrollment Status
                         <span class="arrow">
@@ -106,7 +111,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="has-sub">
+                <li class="has-sub <%= activeClass('/admin/user') %> <%= activeClass('/admin/user/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>User
                         <span class="arrow">

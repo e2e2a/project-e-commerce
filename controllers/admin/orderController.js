@@ -5,15 +5,15 @@ const SITE_TITLE = 'Dunamis';
 
 module.exports.displayOrders = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
-    if (condition) {
-        if (condition) {
+    if (userLogin) {
+        if (userLogin.role === 'admin') {
             try {
                 const orders = await Order.find()
                     .populate('userId')
                     .populate('items.productId');
 
                 res.render('admin/orderView', {
-                    SITE_TITLE: SITE_TITLE,
+                    site_title: SITE_TITLE,
                     title: 'Orders Checkout',
                     orders: orders,
                     messages: req.flash(),
@@ -26,7 +26,7 @@ module.exports.displayOrders = async (req, res) => {
                 res.status(500).send('Server Error');
             }
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login');

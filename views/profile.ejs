@@ -1,0 +1,77 @@
+<%- include('./partials/header/header.ejs'); %>
+
+  <body>
+    <%- include('./partials/navigation/nav.ejs'); %>
+
+    <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div class="banner_content d-md-flex justify-content-between align-items-center">
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+
+    <!-- ================ contact section start ================= -->
+  <section class="section_gap">
+    <div class="container">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-12">
+          <h2 class="contact-title text-center">Update Profile</h2>
+        </div>
+        <div class="col-lg-8 mb-4 mb-lg-0">
+          <form class="form-contact contact_form" action="/profile/edit" method="post">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group position-relative">
+                        <label for="fullname" class=" form-control-label">Fullname</label>
+                        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="fullname" value="<%= userLogin.fullname %>" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group position-relative">
+                        <label for="email" class=" form-control-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<%= userLogin.email %>" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group position-relative">
+                        <label for="address" class=" form-control-label">Address</label>
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="<%= userLogin.address %>" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group position-relative">
+                        <label for="age" class=" form-control-label">Age</label>
+                        <input type="text" class="form-control" id="age" name="age" pattern="^[0-9]{1,10}$" placeholder="Age" value="<%= userLogin.age %>" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group position-relative">
+                        <label for="password" class=" form-control-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group position-relative">
+                        <label for="password" class=" form-control-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" autocomplete="off" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-lg-3 text-center">
+              <button type="submit" class="main_btn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+	<!-- ================ contact section end ================= -->
+
+  <%- include('./partials/footer/footer.ejs'); %>
+
+  </body>
+<%- include('./partials/footer/footer_js.ejs'); %>

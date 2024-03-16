@@ -18,7 +18,7 @@ module.exports.index = async (req, res) => {
                 userLogin: userLogin,
             });
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login');
@@ -30,13 +30,15 @@ module.exports.create = async (req, res) => {
     if (userLogin) {
         if (userLogin.role === 'admin') {
             res.render('admin/courseCreate', {
+                site_title: SITE_TITLE,
+                title: 'Create',
                 req: req,
                 messages: req.flash(),
                 currentUrl: req.originalUrl,
                 userLogin: userLogin,
             })
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login');
@@ -109,7 +111,7 @@ module.exports.edit = async (req, res) => {
                 const course = await Course.findById(courseId)
                 res.render('admin/courseEdit', {
                     site_title: SITE_TITLE,
-                    title: 'Course Update',
+                    title: 'Update',
                     course: course,
                     messages: req.flash(),
                     currentUrl: req.originalUrl,
@@ -121,7 +123,7 @@ module.exports.edit = async (req, res) => {
                     .render('500', { err: err });
             }
         } else {
-            return res.status(404).render('404');
+            return res.status(404).render('404',{userLogin:userLogin});
         }
     } else {
         return res.redirect('/login');
