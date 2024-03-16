@@ -24,7 +24,6 @@ module.exports.index = async (req, res) => {
         return res.redirect('/login');
     }
 }
-
 module.exports.create = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
     if (userLogin) {
