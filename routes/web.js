@@ -4,6 +4,7 @@ const adminCourseController = require('../controllers/admin/courseController');
 const adminUserController = require('../controllers/admin/userController');
 const adminEnrollmentController = require('../controllers/admin/enrollmentController');
 const adminOrderController = require('../controllers/admin/orderController');
+const adminProfileController = require('../controllers/admin/profileController');
 
 const userIndexController = require('../controllers/user/indexController');
 const userProductController = require('../controllers/user/productController');
@@ -47,6 +48,8 @@ module.exports = function(app){
     app.get('/contact', userContactController.index);
     app.post('/doContact', userContactController.doContact);
     //profile
+    app.get('/admin/profile', adminProfileController.index);
+    app.post('/admin/profile/doEdit', adminProfileController.doUpdate);
     app.get('/profile', userProfileController.index);
     app.post('/profile/edit', userProfileController.doEdit);
     //admin
