@@ -26,8 +26,10 @@ module.exports.enroll = async (req, res) => {
         const course = await Course.findById(req.params.courseId);
         if (req.session.login) {
             res.render('courseEnrollment', {
+                site_title: SITE_TITLE,
                 req: req,
                 course: course,
+                title: 'Enroll',
                 messages: req.flash(),
                 currentUrl: req.originalUrl,
                 userLogin: userLogin,

@@ -9,6 +9,7 @@ const flash = require('express-flash');
 const app = express();
 const conn = dbConnect();
 const User = require('./models/user');
+
 // const store = new MongoDBSessionStore({
 //     uri: process.env.MONGODB_CONNECT_URI,
 //     collection: 'sessions'
