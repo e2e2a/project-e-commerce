@@ -12,27 +12,18 @@ module.exports.verify = async (req, res) => {
         const sendcode = req.query.sendcode === 'true';
         if (!verificationToken) {
             const userLogin = await User.findById(req.session.login)
-            return res.status(404).render('404', {
-                login: req.session.login,
-                userLogin: userLogin,
-            });
+            return res.redirect('/register')
         }
         const userToken = await UserToken.findOne({ token: verificationToken });
         if (!userToken) {
             const userLogin = await User.findById(req.session.login)
-            return res.status(404).render('404', {
-                login: req.session.login,
-                userLogin: userLogin,
-            });
+            return res.redirect('/register')
         }
         const expirationCodeDate = userToken.expirationCodeDate;
         const remainingTimeInSeconds = Math.floor((expirationCodeDate - new Date().getTime()) / 1000);
         if (!userToken || userToken.expirationDate < new Date()) {
             const userLogin = await User.findById(req.session.login)
-            return res.status(404).render('404', {
-                login: req.session.login,
-                userLogin: userLogin,
-            });
+            return res.redirect('/register')
         }
         const user = await User.findById({ _id: userToken.userId });
         res.render('verify', {
