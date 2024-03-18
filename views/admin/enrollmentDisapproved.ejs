@@ -15,28 +15,10 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <h3 class="title-5 m-b-35">Status Disapproved</h3>
-                                <div class="table-data__tool">
-                                    <div class="table-data__tool-left">
-                                        <div class="rs-select2--light rs-select2--md">
-                                            <select class="js-select2" name="property">
-                                                <option selected="selected">All Properties</option>
-                                                <option value="">Option 1</option>
-                                                <option value="">Option 2</option>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
-                                        <div class="rs-select2--light rs-select2--sm">
-                                            <select class="js-select2" name="time">
-                                                <option selected="selected">Today</option>
-                                                <option value="">3 Days</option>
-                                                <option value="">1 Week</option>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
-                                    </div>
-                                    <div class="table-data__tool-right">
-                                        <a href="/admin/enrollment/create" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <i class="zmdi zmdi-plus"></i>add Enrollment</a>
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="col-12 col-md-6 col-sm-6 col-xl-4 col-lg-4 d-flex align-items-center">
+                                        <label for="searchName" class="col-form-label mr-2" style="font-size: 18px;font-weight: 500;">Search</label>
+                                        <input type="text" name="searchName" class="form-control" id="searchName" class="sorting" placeholder="Search Fullname">
                                     </div>
                                 </div>
                                 <div class="table-responsive table--no-card m-b-30">
@@ -106,6 +88,25 @@
         </div>
 
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchName');
+    const deceasedRows = document.querySelectorAll('tbody tr');
 
+    searchInput.addEventListener('input', function() {
+        const searchQuery = this.value.trim().toLowerCase();
+
+        deceasedRows.forEach(row => {
+            const fullName = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
+
+            if (fullName.includes(searchQuery)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
 </body>
 <%- include('./partials/footer/footer_js.ejs') %>

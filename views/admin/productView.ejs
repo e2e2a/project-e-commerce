@@ -15,28 +15,14 @@
                         <div class="row">
                             <div class="col-lg-12 ">
                                 <h3 class="title-5 m-b-35">Products</h3>
-                                <div class="row justify-content-between m-b-30">
-                                    <div class="col-12 col-lg-8 col-xl-8 col-md-8 col-sm-8">
-                                        <div class="row">
-                                            <div class="col-6 col-xl-4 rs-select2--light">
-                                                <select class="js-select2" name="time">
-                                                    <option selected>Today</option>
-                                                    <option value="">3 Days</option>
-                                                    <option value="">1 Week</option>
-                                                </select>
-                                                <div class="dropDownSelect2"></div>
-                                            </div>
-                                            <div class="col-6 col-xl-4 rs-select2--light">
-                                                <select class="js-select2" name="time">
-                                                    <option selected>Today</option>
-                                                    <option value="">3 Days</option>
-                                                    <option value="">1 Week</option>
-                                                </select>
-                                                <div class="dropDownSelect2"></div>
-                                            </div>
+                                <div class="row justify-content-between">
+                                    <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="d-flex align-items-center mb-4">
+                                                <label for="searchProductName" class="col-form-label mr-2" style="font-size: 18px;font-weight: 500;">Search</label>
+                                                <input type="text" name="searchProductName" class="form-control" id="searchProductName" class="sorting" placeholder="Search Product Name">
                                         </div>
                                     </div>
-                                    <div class="col-12 col-lg-4 col-xl-4 col-md-5 col-sm-6 justify-content-end text-right">
+                                    <div class="col-12 text-right col-md-6 col-lg-6 col-xl-6 mb-3">
                                         <a href="/admin/product/create" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                             <i class="zmdi zmdi-plus"></i>add Product</a>
                                     </div>
@@ -116,6 +102,25 @@
         <% }) %>
         <% } %>
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchProductName');
+    const deceasedRows = document.querySelectorAll('tbody tr');
 
+    searchInput.addEventListener('input', function() {
+        const searchQuery = this.value.trim().toLowerCase();
+
+        deceasedRows.forEach(row => {
+            const fullName = row.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+
+            if (fullName.includes(searchQuery)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script> 
 </body>
 <%- include('./partials/footer/footer_js.ejs') %>
