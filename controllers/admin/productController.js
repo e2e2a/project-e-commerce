@@ -116,6 +116,7 @@ module.exports.edit = async (req, res) => {
                     product: product,
                     messages: req.flash(),
                     userLogin: userLogin,
+                    currentUrl: req.originalUrl,
                 });
             } catch (err) {
                 return res
