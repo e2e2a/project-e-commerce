@@ -73,7 +73,7 @@ module.exports.checkout = async (req, res) => {
 
         await order.save();
         await Cart.deleteOne({ _id: cart._id });
-        const user = await User.findById(req.session.login)
+        const user = await User.findById(id)
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -96,6 +96,9 @@ module.exports.checkout = async (req, res) => {
                 throw new Error('Failed to send email');
             }
         };
+        /**
+         * @todo email content for sucess payment for gcash
+         */
         const emailContent = `
         <div style="background-color: #e8f5e9; padding: 20px; width: 100%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
         <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${user.fullname},</h2>
@@ -116,6 +119,9 @@ module.exports.checkout = async (req, res) => {
             emailContent
         );
         req.flash('message', 'Order Checkout. Please check your email');
+        /**
+         * @todo make a template success for gcash payment method
+         */
         return res.send('success in checkout card:', cart)
     } catch (error) {
         console.error('Error during checkout:', error);
