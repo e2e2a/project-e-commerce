@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 module.exports.index = async (req, res) => {
     const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
     const userLogin = await User.findById(req.session.login);
-    if(userLogin){
+    if(!userLogin){
         return res.redirect('/login')
     }
     const url = `https://dunamismusiccenter.onrender.com/qrcode/checkout?id=${userLogin._id}`;

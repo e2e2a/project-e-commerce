@@ -248,7 +248,7 @@ module.exports.checkout = async (req, res) => {
     } else{
         console.log('checkbox123', checkbox);
         req.flash('message', 'Please Select only 1 Method Payment.');
-        return res.redirect('/checkout')
+        return res.redirect('/carts')
     }
     } catch (error) {
         console.error('Error during checkout:', error);
