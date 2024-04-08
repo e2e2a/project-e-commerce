@@ -13,6 +13,10 @@ const userCartController = require('../controllers/user/cartController');
 const userContactController = require('../controllers/user/contactController');
 const userProfileController = require('../controllers/user/profileController');
 
+//professor
+const professorIndexController = require('../controllers/professor/indexController');
+const professorProfileController = require('../controllers/professor/profileController');
+
 const authLoginController = require('../controllers/auth/loginController');
 const authRegisterController = require('../controllers/auth/registerController');
 const authVerifyController = require('../controllers/auth/verifyController');
@@ -29,6 +33,12 @@ module.exports = function(app){
     app.get('/verifyEdit', authVerifyEdiController.verify);
     app.post('/verifyDoEdit', authVerifyEdiController.doVerify);
     
+    /**
+     * @todo professor role
+     */
+    app.get('/professor', professorIndexController.index);
+    app.get('/professor/profile', professorProfileController.index);
+
     //products
     app.get('/', userIndexController.index);
     app.get('/products', userProductController.index);

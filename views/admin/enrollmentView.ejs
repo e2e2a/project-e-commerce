@@ -45,6 +45,7 @@
                                                 <th>Schedule</th>
                                                 <th>Time</th>
                                                 <th>Date Enrolling</th>
+                                                <th>Professor</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -52,6 +53,7 @@
                                             <% if(enrollements.length > 0) {%>
                                                 <% enrollements.forEach(enrollement=> { %>
                                                     <% if(enrollement.isApproved === false) {%>
+                                        <form action="/admin/enrollment" method="post">
                                             <tr>
                                                 <td><%= enrollement._id %></td>
                                                 <td><%= enrollement.courseTitle %></td>
@@ -67,26 +69,35 @@
                                                 <td><%= enrollement.schedule %></td>
                                                 <td><%= enrollement.time %></td>
                                                 <td><%= enrollement.dateEnrolling %></td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <select name="professorId" id="professorId" class="form-control" style="width: 250px;">
+                                                            <option value="" selected hidden>Select Professor</option>
+                                                            <% professors.forEach(professor => { %>
+                                                                <option value="<%= professor._id %>"><%= professor.fullname %></option>
+                                                            <% }); %>
+                                                        </select>
+                                                    </div>
+                                                </td>
                                                 <td class="align-middle text-center">
-                                                    <form action="/admin/enrollment" method="post">
-                                                        <input type="hidden" name="enrollementId" value="<%= enrollement._id %>">
-                                                        <div class="btn-group text-center justify-content-center">
-                                                            <a href="/admin/enrollment/edit/<%= enrollement._id %>" class="btn btn-primary" data-toggle="tooltip"
-                                                                data-placement="top" title="Edit">
-                                                                <i class="zmdi zmdi-edit"></i>
-                                                            </a>
-                                                            <button type="submit" name="actions" value="approved" class="btn btn-success" data-toggle="tooltip"
-                                                                data-placement="top" title="Approved">
-                                                                <i class="zmdi zmdi-check"></i>
-                                                            </button>
-                                                            <button type="submit" name="actions" value="disapproved" class="btn btn-danger" data-toggle="tooltip"
-                                                                data-placement="top" title="Disapproved">
-                                                                <i class="zmdi zmdi-close"></i>
-                                                            </button>
-                                                        </div>
-                                                    </form>
+                                                    <input type="hidden" name="enrollementId" value="<%= enrollement._id %>">
+                                                    <div class="btn-group text-center justify-content-center">
+                                                        <a href="/admin/enrollment/edit/<%= enrollement._id %>" class="btn btn-primary" data-toggle="tooltip"
+                                                            data-placement="top" title="Edit">
+                                                            <i class="zmdi zmdi-edit"></i>
+                                                        </a>
+                                                        <button type="submit" name="actions" value="approved" class="btn btn-success" data-toggle="tooltip"
+                                                            data-placement="top" title="Approved">
+                                                            <i class="zmdi zmdi-check"></i>
+                                                        </button>
+                                                        <button type="submit" name="actions" value="disapproved" class="btn btn-danger" data-toggle="tooltip"
+                                                            data-placement="top" title="Disapproved">
+                                                            <i class="zmdi zmdi-close"></i>
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
+                                        </form>
                                                 <% } %>
                                             <% }) %>
                                         <% } %>

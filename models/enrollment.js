@@ -9,6 +9,10 @@ var schema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Course', 
     },
+    professorId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', 
+    },
     courseTitle:{
         type: String,
     },

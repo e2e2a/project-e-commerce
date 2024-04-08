@@ -9,16 +9,18 @@ module.exports.index = async (req, res) => {
     if (userLogin) {
         if (userLogin.role === 'admin') {
             const enrollements = await Enrollement.find();
-                res.render('admin/enrollmentView', {
-                    site_title: SITE_TITLE,
-                    title: 'Enrollment',
-                    enrollements: enrollements,
-                    messages: req.flash(),
-                    currentUrl: req.originalUrl,
-                    userLogin:userLogin,
-                });
+            const professors = await User.find({ role: 'professor' })
+            res.render('admin/enrollmentView', {
+                site_title: SITE_TITLE,
+                title: 'Enrollment',
+                enrollements: enrollements,
+                messages: req.flash(),
+                currentUrl: req.originalUrl,
+                userLogin: userLogin,
+                professors: professors,
+            });
         } else {
-            return res.status(404).render('404',{userLogin:userLogin});
+            return res.status(404).render('404', { userLogin: userLogin });
         }
     } else {
         return res.redirect('/login');
@@ -38,7 +40,7 @@ module.exports.create = async (req, res) => {
                 currentUrl: req.originalUrl,
             });
         } else {
-            return res.status(404).render('404',{userLogin:userLogin});
+            return res.status(404).render('404', { userLogin: userLogin });
         }
     } else {
         return res.redirect('/login')
@@ -96,7 +98,18 @@ module.exports.actions = async (req, res) => {
     const formattedDate = currentDate.toISOString().split('T')[0];
     const enrollementId = req.body.enrollementId;
     if (actions === 'approved') {
-        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { isApproved: true, dateApproved: formattedDate, status: 'approved' }, { new: true }).populate('userId');
+        const professorId = req.body.professorId;
+        if(!professorId){
+            req.flash('message', 'Please provide a professor!');
+            return res.redirect('/admin/enrollment');
+        }
+        const professor = await User.findOne({ _id: professorId, role: 'professor'})
+        if(!professor){
+            req.flash('message', 'Please provide a professor!');
+            return res.redirect('/admin/enrollment');
+        }
+
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { professorId: professor._id,isApproved: true, dateApproved: formattedDate, status: 'approved' }, { new: true }).populate('userId');
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -208,7 +221,7 @@ module.exports.statusApproved = async (req, res) => {
                 currentUrl: req.originalUrl,
             });
         } else {
-            return res.status(404).render('404',{userLogin:userLogin});
+            return res.status(404).render('404', { userLogin: userLogin });
         }
     } else {
         return res.redirect('/login')
@@ -336,7 +349,7 @@ module.exports.statusDisapproved = async (req, res) => {
                 currentUrl: req.originalUrl,
             });
         } else {
-            return res.status(404).render('404',{userLogin:userLogin})
+            return res.status(404).render('404', { userLogin: userLogin })
         }
     } else {
         return res.redirect('/login')
@@ -371,7 +384,7 @@ module.exports.statusDone = async (req, res) => {
                 currentUrl: req.originalUrl,
             });
         } else {
-            return res.status(404).render('404',{userLogin:userLogin})
+            return res.status(404).render('404', { userLogin: userLogin })
         }
     } else {
         return res.redirect('/login')
@@ -413,7 +426,7 @@ module.exports.edit = async (req, res) => {
                     .render('500', { err: err });
             }
         } else {
-            return res.status(404).render('404',{userLogin:userLogin})
+            return res.status(404).render('404', { userLogin: userLogin })
         }
     } else {
         return res.redirect('/login')

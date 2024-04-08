@@ -1,0 +1,40 @@
+<!-- MENU SIDEBAR-->
+<% function activeClass(link) {
+    return currentUrl === link ? 'active' : '';
+} %>
+<aside class="menu-sidebar2">
+    <div class="logo justify-content-center">
+        <a href="">
+            <img src="/public/img/logo.png" alt="Cool Admin" style="height: 50px;width: 150px;" />
+        </a>
+    </div>
+    <div class="menu-sidebar2__content js-scrollbar1">
+            <form action="/logout" method="post" class="account2">
+                <h4 class="name"><%= userLogin.fullname %></h4>
+                <a href="/professor/profile" class="btn btn-link text-secondary m-0">Profile</a>
+                <button type="submit" class="btn btn-link text-secondary">Sign out</button>
+            </form>
+        <nav class="navbar-sidebar2">
+            
+            <ul class="list-unstyled navbar__list">
+                <li class="<%= activeClass('/professor') %>">
+                    <a href="/professor">
+                        <i class="fas fa-tachometer-alt"></i>Home</a>
+                </li>
+            </ul>
+            <ul class="list-unstyled navbar__list">
+                <li class="<%= activeClass('/professor') %>">
+                    <a href="/professor">
+                        <i class="fas fa-tachometer-alt"></i>Classes</a>
+                </li>
+            </ul>
+            <ul class="list-unstyled navbar__list">
+                <li class="<%= activeClass('/professor') %>">
+                    <a href="/professor">
+                        <i class="fas fa-tachometer-alt"></i>schedule</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
+<!-- END MENU SIDEBAR-->
