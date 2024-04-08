@@ -3,6 +3,7 @@ const User = require('../../models/user');
 const Product = require('../../models/product');
 const Order = require('../../models/order');
 const nodemailer = require('nodemailer');
+const qr = require('qrcode');
 const SITE_TITLE = 'Dunamis';
 
 module.exports.cart = async (req, res) => {
@@ -106,36 +107,36 @@ module.exports.addCartSingle = async (req, res) => {
 
 module.exports.updateCart = async (req, res) => {
     const actions = req.body.actions;
-    if(actions === 'update'){
+    if (actions === 'update') {
         try {
             const itemId = req.params.itemId;
             const quantity = parseInt(req.body.qty);
-    
+
             // Find the cart item by ID
             const cartItem = await Cart.findOne({ "items._id": itemId });
-    
+
             // Find the product associated with the cart item
             const product = await Product.findById(cartItem.items.find(item => item._id == itemId).productId);
-    
+
             // Check if the requested quantity exceeds the available stock
             if (product.quantity < quantity) {
                 req.flash('message', 'Quantity exceeds available stock.');
                 return res.redirect(`/carts`);
             }
-    
+
             // Update the quantity of the cart item
             const updatedCartItem = await Cart.findOneAndUpdate(
                 { "items._id": itemId },
                 { $set: { "items.$.quantity": quantity } },
                 { new: true }
             );
-    
+
             // Calculate subtotal
             let subtotal = 0;
             updatedCartItem.items.forEach(item => {
                 subtotal += item.productId.price * item.quantity;
             });
-    
+
             // Redirect back to the product detail page
             console.log('Product in cart updated');
             req.flash('message', 'Cart updated');
@@ -144,7 +145,7 @@ module.exports.updateCart = async (req, res) => {
             console.error('Error updating cart:', error);
             res.status(500).send('Internal Server Error');
         }
-    }else if(actions === 'delete'){
+    } else if (actions === 'delete') {
         try {
             const itemId = req.body.itemId;
             // Find and remove the cart item by its ID
@@ -168,63 +169,85 @@ module.exports.updateCart = async (req, res) => {
 module.exports.checkout = async (req, res) => {
     try {
         const checkbox = req.body.checkbox;
-    if(checkbox === 'Gcash'){
-        return res.redirect('/qrcode')
-    } else if(checkbox === 'COD'){
-        const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
-        if (!cart) {
-            return res.status(404).send('Cart not found');
-        }
-
-        // Calculate total amount based on items in the cart
-        let totalAmount = 0;
-        for (const item of cart.items) {
-            if (item.productId && item.productId.price) {
-                totalAmount += item.productId.price * item.quantity;
+        if (checkbox === 'Gcash') {
+            const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+            const userLogin = await User.findById(req.session.login);
+            if (!userLogin) {
+                return res.redirect('/login')
             }
-            // Update the quantity of the product item
-            await Product.findByIdAndUpdate(item.productId, {
-                $inc: { quantity: -item.quantity }
+            const url = `https://dunamismusiccenter.onrender.com/qrcode/checkout?id=${userLogin._id}`;
+            qr.toDataURL(url, (err, qrDataURL) => {
+                if (err) {
+                    console.error(err);
+                    // Handle error appropriately
+                    return res.status(500).send('Error generating QR code');
+                }
+                return res.render('qrcode', {
+                    site_title: SITE_TITLE,
+                    title: 'Qr Code',
+                    req: req,
+                    messages: req.flash(),
+                    cart: cart,
+                    userLogin: userLogin,
+                    currentUrl: req.originalUrl,
+                    qrCodeDataURL: qrDataURL // Pass the QR code data URL to the template
+                });
             });
-        }
-
-        const orderItems = cart.items.map(item => ({
-            productId: item.productId._id,
-            quantity: item.quantity,
-        }));
-
-        const order = new Order({
-            userId: req.session.login,
-            items: orderItems,
-            totalAmount: totalAmount,
-        });
-
-        await order.save();
-        await Cart.deleteOne({ _id: cart._id });
-        const user = await User.findById(req.session.login)
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'emonawong22@gmail.com',
-                pass: 'nouv heik zbln qkhf',
-            },
-        });
-        const sendEmail = async (from, to, subject, htmlContent) => {
-            try {
-                const mailOptions = {
-                    from,
-                    to,
-                    subject,
-                    html: htmlContent,
-                };
-                const info = await transporter.sendMail(mailOptions);
-                console.log('Email sent:', info.response);
-            } catch (error) {
-                console.error('Error sending email:', error);
-                throw new Error('Failed to send email');
+        } else if (checkbox === 'COD') {
+            const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+            if (!cart) {
+                return res.status(404).send('Cart not found');
             }
-        };
-        const emailContent = `
+
+            // Calculate total amount based on items in the cart
+            let totalAmount = 0;
+            for (const item of cart.items) {
+                if (item.productId && item.productId.price) {
+                    totalAmount += item.productId.price * item.quantity;
+                }
+                // Update the quantity of the product item
+                await Product.findByIdAndUpdate(item.productId, {
+                    $inc: { quantity: -item.quantity }
+                });
+            }
+
+            const orderItems = cart.items.map(item => ({
+                productId: item.productId._id,
+                quantity: item.quantity,
+            }));
+
+            const order = new Order({
+                userId: req.session.login,
+                items: orderItems,
+                totalAmount: totalAmount,
+            });
+
+            await order.save();
+            await Cart.deleteOne({ _id: cart._id });
+            const user = await User.findById(req.session.login)
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'emonawong22@gmail.com',
+                    pass: 'nouv heik zbln qkhf',
+                },
+            });
+            const sendEmail = async (from, to, subject, htmlContent) => {
+                try {
+                    const mailOptions = {
+                        from,
+                        to,
+                        subject,
+                        html: htmlContent,
+                    };
+                    const info = await transporter.sendMail(mailOptions);
+                    console.log('Email sent:', info.response);
+                } catch (error) {
+                    console.error('Error sending email:', error);
+                    throw new Error('Failed to send email');
+                }
+            };
+            const emailContent = `
         <div style="background-color: #e8f5e9; padding: 20px; width: 100%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
         <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${user.fullname},</h2>
         <p style="color: #333;">Thank you for your purchase at Dunamismusiccenter.onrender.com. Your order has been successfully placed.</p>
@@ -237,19 +260,19 @@ module.exports.checkout = async (req, res) => {
         <p style="color: #333;">Thank you for shopping with us!</p>
     </div>
         `;
-        sendEmail(
-            'Dunamismusiccenter.onrender.com <cherry@gmail.com>',
-            user.email,
-            'Order Checkout',
-            emailContent
-        );
-        req.flash('message', 'Order Checkout. Please check your email');
-        return res.redirect('/carts');
-    } else{
-        console.log('checkbox123', checkbox);
-        req.flash('message', 'Please Select only 1 Method Payment.');
-        return res.redirect('/carts')
-    }
+            sendEmail(
+                'Dunamismusiccenter.onrender.com <cherry@gmail.com>',
+                user.email,
+                'Order Checkout',
+                emailContent
+            );
+            req.flash('message', 'Order Checkout. Please check your email');
+            return res.redirect('/carts');
+        } else {
+            console.log('checkbox123', checkbox);
+            req.flash('message', 'Please Select only 1 Method Payment.');
+            return res.redirect('/carts')
+        }
     } catch (error) {
         console.error('Error during checkout:', error);
         res.status(500).send('Internal Server Error');

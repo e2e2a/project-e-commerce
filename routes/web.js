@@ -48,7 +48,7 @@ module.exports = function(app){
     //products
     app.get('/', userIndexController.index);
     app.get('/products', userProductController.index);
-    app.get('/qrcode', userQrcodeController.index);
+    // app.get('/qrcode', userQrcodeController.index);
     app.get('/qrcode/checkout', userQrcodeController.checkout);
     // app.get('/qrcode/checkout/success', userQrcodeController.success);
     app.get('/products/:category', userProductController.indexCategory);
