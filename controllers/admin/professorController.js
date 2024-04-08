@@ -1,7 +1,6 @@
 const SITE_TITLE = 'Dunamis';
 const User = require('../../models/user');
 const Enrollment = require('../../models/enrollment');
-var bcrypt = require("bcrypt");
 
 module.exports.index = async (req, res) => {
     const userLogin = await User.findById(req.session.login);

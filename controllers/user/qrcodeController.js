@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 module.exports.index = async (req, res) => {
     const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
     const userLogin = await User.findById(req.session.login);
-    if(!userLogin){
+    if (!userLogin) {
         return res.redirect('/login')
     }
     const url = `https://dunamismusiccenter.onrender.com/qrcode/checkout?id=${userLogin._id}`;
@@ -36,14 +36,14 @@ module.exports.index = async (req, res) => {
 module.exports.checkout = async (req, res) => {
     try {
         const id = req.query.id;
-        if(!id){
+        if (!id) {
             return res.status(404).send('Cart not found');
         }
         if (!mongoose.Types.ObjectId.isValid(id)) {
             console.log('Invalid subjectId:', id);
-            return res.status(404).render('404', {userLogin: {role: 'user'}});
+            return res.status(404).render('404', { userLogin: { role: 'user' } });
         }
-        const cart = await Cart.findOne({ userId: id}).populate('items.productId');
+        const cart = await Cart.findOne({ userId: id }).populate('items.productId');
         if (!cart) {
             return res.status(404).send('Cart not found');
         }
@@ -72,6 +72,7 @@ module.exports.checkout = async (req, res) => {
         });
 
         await order.save();
+        req.session.total = totalAmount;
         await Cart.deleteOne({ _id: cart._id });
         const user = await User.findById(id)
         const transporter = nodemailer.createTransport({
@@ -122,10 +123,39 @@ module.exports.checkout = async (req, res) => {
         /**
          * @todo make a template success for gcash payment method
          */
-        return res.send('success in checkout card:', cart)
+        req.session.login = user._id;
+
+        const userLogin = await User.findById(user._id);
+        const total = req.session.total;
+        return res.render('gcashPaymentSuccess', {
+            site_title: SITE_TITLE,
+            title: 'Qr Code',
+            req: req,
+            messages: req.flash(),
+            cart: cart,
+            userLogin: userLogin,
+            currentUrl: req.originalUrl,
+            total: total
+        });
     } catch (error) {
         console.error('Error during checkout:', error);
         res.status(500).send('Internal Server Error');
     }
 };
 
+module.exports.success = async (req, res) => {
+    const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+    const userLogin = await User.findById(req.session.login);
+    if (!userLogin) {
+        return res.redirect('/login')
+    }
+    res.render('gcashPaymentSuccess', {
+        site_title: SITE_TITLE,
+        title: 'Qr Code',
+        req: req,
+        messages: req.flash(),
+        cart: cart,
+        userLogin: userLogin,
+        currentUrl: req.originalUrl,
+    });
+}

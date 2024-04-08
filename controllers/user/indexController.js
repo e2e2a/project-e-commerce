@@ -8,13 +8,16 @@ const Cart = require('../../models/cart');
 module.exports.index = async (req, res) => {
     const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
     const userLogin = await User.findById(req.session.login);
-        res.render('index', {
-            site_title: SITE_TITLE,
-            title: 'Home',
-            req: req,
-            messages: req.flash(),
-            cart: cart,
-            userLogin: userLogin,
-            currentUrl: req.originalUrl,
-        })
+    if (userLogin && userLogin.role === 'professor') {
+        return res.redirect('/professor');
+    }
+    res.render('index', {
+        site_title: SITE_TITLE,
+        title: 'Home',
+        req: req,
+        messages: req.flash(),
+        cart: cart,
+        userLogin: userLogin,
+        currentUrl: req.originalUrl,
+    });
 }
