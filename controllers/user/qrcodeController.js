@@ -7,31 +7,31 @@ const Order = require('../../models/order');
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 
-module.exports.index = async (req, res) => {
-    const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
-    const userLogin = await User.findById(req.session.login);
-    if (!userLogin) {
-        return res.redirect('/login')
-    }
-    const url = `https://dunamismusiccenter.onrender.com/qrcode/checkout?id=${userLogin._id}`;
-    qr.toDataURL(url, (err, qrDataURL) => {
-        if (err) {
-            console.error(err);
-            // Handle error appropriately
-            return res.status(500).send('Error generating QR code');
-        }
-        res.render('qrcode', {
-            site_title: SITE_TITLE,
-            title: 'Qr Code',
-            req: req,
-            messages: req.flash(),
-            cart: cart,
-            userLogin: userLogin,
-            currentUrl: req.originalUrl,
-            qrCodeDataURL: qrDataURL // Pass the QR code data URL to the template
-        });
-    });
-}
+// module.exports.index = async (req, res) => {
+//     const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+//     const userLogin = await User.findById(req.session.login);
+//     if (!userLogin) {
+//         return res.redirect('/login')
+//     }
+//     const url = `https://dunamismusiccenter.onrender.com/qrcode/checkout?id=${userLogin._id}`;
+//     qr.toDataURL(url, (err, qrDataURL) => {
+//         if (err) {
+//             console.error(err);
+//             // Handle error appropriately
+//             return res.status(500).send('Error generating QR code');
+//         }
+//         res.render('qrcode', {
+//             site_title: SITE_TITLE,
+//             title: 'Qr Code',
+//             req: req,
+//             messages: req.flash(),
+//             cart: cart,
+//             userLogin: userLogin,
+//             currentUrl: req.originalUrl,
+//             qrCodeDataURL: qrDataURL // Pass the QR code data URL to the template
+//         });
+//     });
+// }
 
 module.exports.checkout = async (req, res) => {
     try {
@@ -48,13 +48,11 @@ module.exports.checkout = async (req, res) => {
             return res.status(404).send('Cart not found');
         }
 
-        // Calculate total amount based on items in the cart
         let totalAmount = 0;
         for (const item of cart.items) {
             if (item.productId && item.productId.price) {
                 totalAmount += item.productId.price * item.quantity;
             }
-            // Update the quantity of the product item
             await Product.findByIdAndUpdate(item.productId, {
                 $inc: { quantity: -item.quantity }
             });
@@ -104,7 +102,7 @@ module.exports.checkout = async (req, res) => {
         <div style="background-color: #e8f5e9; padding: 20px; width: 100%; text-align: justify; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
         <h2 style="color: #007bff; margin-bottom: 20px;">Hello ${user.fullname},</h2>
         <p style="color: #333;">Thank you for your purchase at Dunamismusiccenter.onrender.com. Your order has been successfully placed.</p>
-        <p style="color: #333;">To ensure smooth delivery of your items, please note the following:</p>
+        <p style="color: #333;">We have received the payment for your order. To ensure smooth delivery of your items, please note the following:</p>
         <ul style="color: #333; list-style-type: none; padding-left: 20px;">
             <li>Your total payment amount: ₱${totalAmount.toFixed(2)}</li>
             <li>Your order will be delivered within 1 hour.</li>
