@@ -16,6 +16,8 @@ const userProfileController = require('../controllers/user/profileController');
 //professor
 const professorIndexController = require('../controllers/professor/indexController');
 const professorProfileController = require('../controllers/professor/profileController');
+const professorClassController = require('../controllers/professor/classController');
+const professorScheduleController = require('../controllers/professor/scheduleController');
 
 const authLoginController = require('../controllers/auth/loginController');
 const authRegisterController = require('../controllers/auth/registerController');
@@ -38,6 +40,8 @@ module.exports = function(app){
      */
     app.get('/professor', professorIndexController.index);
     app.get('/professor/profile', professorProfileController.index);
+    app.get('/professor/classes', professorClassController.index);
+    app.get('/professor/schedule', professorScheduleController.index);
 
     //products
     app.get('/', userIndexController.index);

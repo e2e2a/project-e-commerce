@@ -1,0 +1,65 @@
+
+<%- include('./partials/header/header.ejs'); %>
+<body class="animsition">
+    <div class="page-wrapper">
+        <%- include('./partials/navigation/mobile-nav.ejs'); %>
+        <%- include('./partials/navigation/nav.ejs'); %>
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <%- include('./partials/sidebar/sidebar.ejs'); %>
+            <!-- END HEADER DESKTOP-->
+
+            <!-- STATISTIC-->
+            <section class="statistic m-t-75">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="row" <% if(studentClass.length <= 4) { %> style="height: 60vh;" <% } %>>
+                            <div class="col-12">
+                                <h3 class=" m-b-35">Schedule</h3>
+                            </div>
+                            
+                                    
+                                    <div class="col-lg-12 ">
+                                    <div class="table-responsive table--no-card m-b-30">
+                                        <table class="table table-borderless table-striped table-earning justify-content-center align-items-center">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>Course Title</th>
+                                                    <th>Level</th>
+                                                    <th>Time</th>
+                                                    <th>Days</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if(studentClass.length > 0) { %>
+                                                    <% studentClass.forEach(student => { %>
+                                                <tr>
+                                                    <td class="align-middle text-center"><%= student.courseTitle %></td>
+                                                    <td class="align-middle text-center"><%= student.level %></td>
+                                                    <td class="align-middle text-center"><%= student.time %></td>
+                                                    <td class="align-middle text-center"><%= student.schedule %></td>
+                                                </tr>
+                                                <% }); %>
+                                            <% } else { %>
+                                                    <h3 class="">No Schedule found.</h3>
+                                            <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                
+                        </div>
+                        <%- include('./partials/footer/copyright.ejs'); %>
+                    </div>
+                </div>
+            </section>
+            <!-- END STATISTIC-->
+
+            <!-- END PAGE CONTAINER-->
+        </div>
+
+    </div>
+</body>
+<%- include('./partials/footer/footer_js.ejs'); %>
