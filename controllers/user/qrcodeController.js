@@ -1,6 +1,7 @@
 const Cart = require('../../models/cart');
 const User = require('../../models/user');
 const SITE_TITLE = 'Dunamis';
+const Product = require('../../models/product');
 const qr = require('qrcode'); // Importing the qrcode library
 const Order = require('../../models/order');
 const nodemailer = require('nodemailer');
