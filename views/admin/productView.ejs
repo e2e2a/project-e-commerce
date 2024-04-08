@@ -31,7 +31,7 @@
                                 <div class="table-responsive table--no-card m-b-30">
                                     <table class="table table-borderless table-striped table-earning justify-content-center align-items-center">
                                         <thead>
-                                            <tr class="text-center">
+                                            <tr class="text-center" style="white-space: nowrap;">
                                                 <th>Product Image</th>
                                                 <th>Product Name</th>
                                                 <th>price</th>
@@ -46,7 +46,7 @@
                                         <tbody>
                                             <% if(products.length > 0) {%>
                                                 <% products.forEach(product=> { %>
-                                            <tr>
+                                            <tr style="white-space: nowrap;">
                                                 <td class="align-middle text-center"><img src="<%= product.imageURL %>" alt="" style="height: 60px; width: 60px; border-radius: 5px; border: 1px solid black;"></td>
                                                 <td class="align-middle text-center"><%= product.name %></td>
                                                 <td class="align-middle text-center"><%= product.price %></td>

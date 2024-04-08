@@ -5,7 +5,7 @@
         <%- include('./partials/navigation/mobile-nav.ejs'); %>
 
         <!-- PAGE CONTAINER-->
-        <div class="page-container2">
+        <div class="page-container2" style="min-height: 100vh;">
             <%- include('./partials/navigation/nav.ejs'); %>
             <%- include('./partials/sidebar/sidebar.ejs'); %>
             <!-- MAIN CONTENT-->
@@ -14,7 +14,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h3 class="title-5 m-b-35">Users</h3>
+                                <h3 class="title-5 m-b-35">Professors</h3>
                                 <div class="row justify-content-between">
                                     <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                                         <div class="d-flex align-items-center mb-4">
@@ -22,17 +22,13 @@
                                                 <input type="text" name="searchName" class="form-control" id="searchName" class="sorting" placeholder="Search Fullname">
                                         </div>
                                     </div>
-                                    <div class="col-12 text-right col-md-6 col-lg-6 col-xl-6 mb-3">
-                                        <a href="/admin/user/create" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <i class="zmdi zmdi-plus"></i>add user</a>
-                                    </div>
                                 </div>
                                 <div class="table-responsive table--no-card m-b-30">
                                     <table class="table table-borderless table-striped table-earning">
                                         <thead>
-                                            <tr style="white-space: nowrap;">
-                                                <th class="text-center">ID</th>
-                                                <th>Full Name</th>
+                                            <tr class="text-center" style="white-space: nowrap;">
+                                                <th class="">ID</th>
+                                                <th>Fullname</th>
                                                 <th>Address</th>
                                                 <th>Age</th>
                                                 <th>Gmail</th>
@@ -44,7 +40,7 @@
                                             <% if(users.length > 0) { %>
                                                 <% users.forEach(user=> { %>
                                                     <% if(user.isVerified === true) { %>
-                                            <tr style="white-space: nowrap;">
+                                            <tr  class="text-center" style="white-space: nowrap;">
                                                 <td><%= user._id %></td>
                                                 <td><%= user.fullname %></td>
                                                 <td><%= user.address %></td>
@@ -55,13 +51,17 @@
                                                     <form action="/admin/user/delete" method="post">
                                                         <input type="hidden" name="userId" value="<%= user._id %>">
                                                         <div class="btn-group text-center justify-content-center">
+                                                            <a href="/admin/professor/schedule/<%= user._id %>" class="btn btn-secondary" data-toggle="tooltip"
+                                                                data-placement="top" title="Edit">
+                                                                <i class="zmdi zmdi-eye mr-2"></i> View Schedule
+                                                            </a>
                                                             <a href="/admin/user/edit/<%= user._id %>" class="btn btn-primary" data-toggle="tooltip"
                                                                 data-placement="top" title="Edit">
-                                                                <i class="zmdi zmdi-edit"></i>
+                                                                <i class="zmdi zmdi-edit"></i> Edit
                                                             </a>
                                                             <button type="submit" class="btn btn-danger" data-toggle="tooltip"
                                                                 data-placement="top" title="Delete">
-                                                                <i class="zmdi zmdi-delete"></i>
+                                                                <i class="zmdi zmdi-delete"></i> Delete
                                                             </button>
                                                         </div>
                                                     </form>
@@ -75,7 +75,6 @@
                                 </div>
                             </div>
                         </div>
-                    <%- include('./partials/footer/copyright.ejs'); %>
                     </div>
                 </div>
             </div>

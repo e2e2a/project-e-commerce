@@ -5,6 +5,7 @@ const adminUserController = require('../controllers/admin/userController');
 const adminEnrollmentController = require('../controllers/admin/enrollmentController');
 const adminOrderController = require('../controllers/admin/orderController');
 const adminProfileController = require('../controllers/admin/profileController');
+const adminProfessorController = require('../controllers/admin/professorController');
 
 const userIndexController = require('../controllers/user/indexController');
 const userProductController = require('../controllers/user/productController');
@@ -48,6 +49,7 @@ module.exports = function(app){
     app.get('/', userIndexController.index);
     app.get('/products', userProductController.index);
     app.get('/qrcode', userQrcodeController.index);
+    app.get('/qrcode/checkout', userQrcodeController.checkout);
     app.get('/products/:category', userProductController.indexCategory);
     app.get('/product/detail/:id', userProductController.detail);
     //courses
@@ -60,21 +62,18 @@ module.exports = function(app){
     app.post('/cartsingle', userCartController.addCartSingle);
     app.post('/cart/update/:itemId', userCartController.updateCart);
     app.post('/checkout', userCartController.checkout);
-    /**
-     * @todo
-     * this checkout is in qrcodeController
-     */
-    app.get('/qrcode/checkout', userQrcodeController.checkout);
-    //contact
     app.get('/contact', userContactController.index);
     app.post('/doContact', userContactController.doContact);
-    //profile
-    app.get('/admin/profile', adminProfileController.index);
-    app.post('/admin/profile/doEdit', adminProfileController.doUpdate);
     app.get('/profile', userProfileController.index);
     app.post('/profile/edit', userProfileController.doEdit);
+
     //admin
-    app.get('/admin', adminIndexController.index)
+    app.get('/admin', adminIndexController.index);
+    app.get('/admin/profile', adminProfileController.index);
+    app.post('/admin/profile/doEdit', adminProfileController.doUpdate);
+    app.get('/admin/professor', adminProfessorController.index);
+    app.get('/admin/professor/schedule/:id', adminProfessorController.schedule);
+    //
     app.get('/admin/product', adminProductController.index);
     app.get('/admin/product/edit/:productId', adminProductController.edit);
     app.post('/admin/product/doEdit/:productId', adminProductController.doEdit);

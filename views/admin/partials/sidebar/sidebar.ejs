@@ -21,6 +21,10 @@
                     <a href="/admin">
                         <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                 </li>
+                <li class="<%= activeClass('/admin/professor') %>">
+                    <a href="/admin/professor">
+                        <i class="fas fa-chart-bar"></i>Professor</a>
+                </li>
                 <li class="has-sub <%= activeClass('/admin/product') %> <%= activeClass('/admin/product/create') %>">
                     <a class="js-arrow" href="#">
                         <i class="fas fa-chart-bar"></i>Products

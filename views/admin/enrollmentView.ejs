@@ -30,7 +30,7 @@
                                 <div class="table-responsive table--no-card m-b-30">
                                     <table class="table table-borderless table-striped table-earning">
                                         <thead>
-                                            <tr>
+                                            <tr style="white-space: nowrap;">
                                                 <th class="text-center">ID</th>
                                                 <th>Course Title</th>
                                                 <th>Fullname</th>
@@ -54,7 +54,7 @@
                                                 <% enrollements.forEach(enrollement=> { %>
                                                     <% if(enrollement.isApproved === false) {%>
                                         <form action="/admin/enrollment" method="post">
-                                            <tr>
+                                            <tr style="white-space: nowrap;">
                                                 <td><%= enrollement._id %></td>
                                                 <td><%= enrollement.courseTitle %></td>
                                                 <td><%= enrollement.name %></td>

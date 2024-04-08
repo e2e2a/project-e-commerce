@@ -41,6 +41,7 @@
                                                 <label for="role" class=" form-control-label">Role</label>
                                                 <select name="role" id="role" class="form-control" required>
                                                     <option value="user" <% if( user.role === 'user' ) { %> selected <% } %>>User</option>
+                                                    <option value="admin" <% if( user.role === 'professor' ) { %> selected <% } %>>Professor</option>
                                                     <option value="admin" <% if( user.role === 'admin' ) { %> selected <% } %>>Admin</option>
                                                 </select>
                                             </div>

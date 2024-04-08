@@ -19,7 +19,7 @@
                                 <div class="table-responsive table--no-card m-b-30">
                                     <table class="table table-borderless table-striped table-earning">
                                         <thead>
-                                            <tr>
+                                            <tr style="white-space: nowrap;">
                                                 <th class="text-center">Order ID</th>
                                                 <th>Customer Name</th>
                                                 <th>Items</th>
@@ -29,7 +29,7 @@
                                         </thead>
                                         <tbody>
                                             <% orders.forEach(order => { %>
-                                            <tr>
+                                            <tr style="white-space: nowrap;">
                                                 <td><%= order._id %></td>
                                                 <td><%= order.userId?.fullname %></td>
                                                 <td>
