@@ -64,7 +64,7 @@ module.exports = function(app){
      * @todo
      * this checkout is in qrcodeController
      */
-    app.post('/qrcode/checkout', userQrcodeController.checkout);
+    app.get('/qrcode/checkout', userQrcodeController.checkout);
     //contact
     app.get('/contact', userContactController.index);
     app.post('/doContact', userContactController.doContact);

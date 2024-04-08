@@ -4,6 +4,7 @@ const SITE_TITLE = 'Dunamis';
 const qr = require('qrcode'); // Importing the qrcode library
 const Order = require('../../models/order');
 const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
 
 module.exports.index = async (req, res) => {
     const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
@@ -36,6 +37,10 @@ module.exports.checkout = async (req, res) => {
         const id = req.query.id;
         if(!id){
             return res.status(404).send('Cart not found');
+        }
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            console.log('Invalid subjectId:', id);
+            return res.status(404).render('404', {userLogin: {role: 'user'}});
         }
         const cart = await Cart.findOne({ userId: id}).populate('items.productId');
         if (!cart) {
