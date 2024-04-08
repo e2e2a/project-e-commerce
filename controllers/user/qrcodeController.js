@@ -66,7 +66,7 @@ module.exports.checkout = async (req, res) => {
         }));
 
         const order = new Order({
-            userId: req.session.login,
+            userId: id,
             items: orderItems,
             totalAmount: totalAmount,
         });
