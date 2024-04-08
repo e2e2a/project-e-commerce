@@ -167,6 +167,10 @@ module.exports.updateCart = async (req, res) => {
 
 module.exports.checkout = async (req, res) => {
     try {
+        const checkbox = req.body.checkbox;
+    if(checkbox === 'Gcash'){
+        return res.redirect('/qrcode')
+    } else if(checkbox === 'COD'){
         const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
         if (!cart) {
             return res.status(404).send('Cart not found');
@@ -240,7 +244,12 @@ module.exports.checkout = async (req, res) => {
             emailContent
         );
         req.flash('message', 'Order Checkout. Please check your email');
-        return res.redirect('/carts')
+        return res.redirect('/carts');
+    } else{
+        console.log('checkbox123', checkbox);
+        req.flash('message', 'Please Select only 1 Method Payment.');
+        return res.redirect('/checkout')
+    }
     } catch (error) {
         console.error('Error during checkout:', error);
         res.status(500).send('Internal Server Error');

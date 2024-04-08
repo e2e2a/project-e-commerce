@@ -12,6 +12,7 @@ const userCourseController = require('../controllers/user/courseController');
 const userCartController = require('../controllers/user/cartController');
 const userContactController = require('../controllers/user/contactController');
 const userProfileController = require('../controllers/user/profileController');
+const userQrcodeController = require('../controllers/user/qrcodeController');
 
 //professor
 const professorIndexController = require('../controllers/professor/indexController');
@@ -36,7 +37,7 @@ module.exports = function(app){
     app.post('/verifyDoEdit', authVerifyEdiController.doVerify);
     
     /**
-     * @todo professor role
+     * professor role
      */
     app.get('/professor', professorIndexController.index);
     app.get('/professor/profile', professorProfileController.index);
@@ -46,6 +47,7 @@ module.exports = function(app){
     //products
     app.get('/', userIndexController.index);
     app.get('/products', userProductController.index);
+    app.get('/qrcode', userQrcodeController.index);
     app.get('/products/:category', userProductController.indexCategory);
     app.get('/product/detail/:id', userProductController.detail);
     //courses
@@ -58,6 +60,11 @@ module.exports = function(app){
     app.post('/cartsingle', userCartController.addCartSingle);
     app.post('/cart/update/:itemId', userCartController.updateCart);
     app.post('/checkout', userCartController.checkout);
+    /**
+     * @todo
+     * this checkout is in qrcodeController
+     */
+    app.post('/qrcode/checkout', userQrcodeController.checkout);
     //contact
     app.get('/contact', userContactController.index);
     app.post('/doContact', userContactController.doContact);

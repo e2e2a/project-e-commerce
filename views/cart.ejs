@@ -102,7 +102,29 @@
                       <form action="/checkout" method="post">
                         <div class="checkout_btn_inner">
                           <a class="gray_btn" href="/products">Continue Shopping</a>
-                          <button type="submit" class="main_btn" href="#">Proceed to checkout</button>
+                          <button type="button" class="main_btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Proceed to checkout</button>
+                              <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex justify-content-center align-items-center">
+                                      <div class="mr-3">
+                                        <input type="checkbox" name="checkbox" id="checkbox" value="Gcash"> Gcash
+                                      </div>
+                                      <div class="mr-3">
+                                        <input type="checkbox" name="checkbox" id="checkbox" value="COD"> COD
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-primary">Continue</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                         </div>
                       </form>
                     </td>
@@ -115,6 +137,7 @@
       </section>
       <!--================End Cart Area =================-->
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
       <%- include('./partials/footer/footer.ejs'); %>
 
   </body>
