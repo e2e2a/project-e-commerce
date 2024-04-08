@@ -50,7 +50,7 @@ module.exports = function(app){
     app.get('/products', userProductController.index);
     app.get('/qrcode', userQrcodeController.index);
     app.get('/qrcode/checkout', userQrcodeController.checkout);
-    app.get('/qrcode/checkout/success', userQrcodeController.success);
+    // app.get('/qrcode/checkout/success', userQrcodeController.success);
     app.get('/products/:category', userProductController.indexCategory);
     app.get('/product/detail/:id', userProductController.detail);
     //courses

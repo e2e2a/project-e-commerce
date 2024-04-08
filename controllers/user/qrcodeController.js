@@ -143,19 +143,19 @@ module.exports.checkout = async (req, res) => {
     }
 };
 
-module.exports.success = async (req, res) => {
-    const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
-    const userLogin = await User.findById(req.session.login);
-    if (!userLogin) {
-        return res.redirect('/login')
-    }
-    res.render('gcashPaymentSuccess', {
-        site_title: SITE_TITLE,
-        title: 'Qr Code',
-        req: req,
-        messages: req.flash(),
-        cart: cart,
-        userLogin: userLogin,
-        currentUrl: req.originalUrl,
-    });
-}
+// module.exports.success = async (req, res) => {
+//     const cart = await Cart.findOne({ userId: req.session.login }).populate('items.productId');
+//     const userLogin = await User.findById(req.session.login);
+//     if (!userLogin) {
+//         return res.redirect('/login')
+//     }
+//     res.render('gcashPaymentSuccess', {
+//         site_title: SITE_TITLE,
+//         title: 'Qr Code',
+//         req: req,
+//         messages: req.flash(),
+//         cart: cart,
+//         userLogin: userLogin,
+//         currentUrl: req.originalUrl,
+//     });
+// }
