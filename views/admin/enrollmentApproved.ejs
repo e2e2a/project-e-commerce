@@ -39,6 +39,7 @@
                                                 <th>Time</th>
                                                 <th>Date Enrolling</th>
                                                 <th>Date Approved</th>
+                                                <th>Professor</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -61,6 +62,7 @@
                                                 <td><%= enrollement.time %></td>
                                                 <td><%= enrollement.dateEnrolling %></td>
                                                 <td><%= enrollement.dateApproved %></td>
+                                                <td><%= enrollement.professorId.fullname %></td>
                                                 <td class="align-middle text-center">
                                                     <form action="/admin/enrollment/statusApprovedActions" method="post">
                                                         <input type="hidden" name="enrollementId" value="<%= enrollement._id %>">

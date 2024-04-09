@@ -8,7 +8,7 @@ module.exports.index = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
     if (userLogin) {
         if (userLogin.role === 'admin') {
-            const enrollements = await Enrollement.find();
+            const enrollements = await Enrollement.find().populate('professorId');
             const professors = await User.find({ role: 'professor' })
             res.render('admin/enrollmentView', {
                 site_title: SITE_TITLE,
@@ -210,7 +210,7 @@ module.exports.statusApproved = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
     if (userLogin) {
         if (userLogin.role === 'admin') {
-            const enrollements = await Enrollement.find();
+            const enrollements = await Enrollement.find().populate('professorId');
             res.render('admin/enrollmentApproved', {
                 site_title: SITE_TITLE,
                 title: 'Enrollment',
@@ -233,7 +233,7 @@ module.exports.statusApprovedActions = async (req, res) => {
     const formattedDate = currentDate.toISOString().split('T')[0];
     const enrollementId = req.body.enrollementId;
     if (actions === 'done') {
-        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { dateEnd: formattedDate, status: 'done' }, { new: true }).populate('userId');
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { dateEnd: formattedDate, status: 'done' }, { new: true }).populate('userId').populate('professorId');
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -338,7 +338,7 @@ module.exports.statusDisapproved = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
     if (userLogin) {
         if (userLogin.role === 'admin') {
-            const enrollements = await Enrollement.find();
+            const enrollements = await Enrollement.find().populate('professorId');
             res.render('admin/enrollmentDisapproved', {
                 site_title: SITE_TITLE,
                 title: 'Enrollment',
@@ -411,7 +411,7 @@ module.exports.edit = async (req, res) => {
         if (userLogin.role === 'admin') {
             try {
                 const enrollmentId = req.params.enrollmentId
-                const enrollment = await Enrollement.findById(enrollmentId)
+                const enrollment = await Enrollement.findById(enrollmentId).populate('professorId')
                 res.render('admin/enrollmentEdit', {
                     site_title: SITE_TITLE,
                     title: 'Enrollment Update',

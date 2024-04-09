@@ -40,6 +40,7 @@
                                                 <th>Date Enrolling</th>
                                                 <th>Date Approved</th>
                                                 <th>Date End</th>
+                                                <th>Professor</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -63,6 +64,7 @@
                                                 <td><%= enrollement.dateEnrolling %></td>
                                                 <td><%= enrollement.dateApproved %></td>
                                                 <td><%= enrollement.dateEnd %></td>
+                                                <td><%= enrollement.professorId.fullname %></td>
                                                 <td class="align-middle text-center">
                                                     <form action="/admin/enrollment/deleteDone" method="post">
                                                         <input type="hidden" name="enrollementId" value="<%= enrollement._id %>">
