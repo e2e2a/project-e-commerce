@@ -26,6 +26,7 @@ const authRegisterController = require('../controllers/auth/registerController')
 const authVerifyController = require('../controllers/auth/verifyController');
 const authVerifyEdiController = require('../controllers/auth/verifyEditController');
 const authLogoutController = require('../controllers/auth/logoutController');
+const authTermsController = require('../controllers/auth/termsController');
 module.exports = function(app){
     app.get('/login', authLoginController.login);
     app.post('/doLogin', authLoginController.doLogin);
@@ -36,7 +37,7 @@ module.exports = function(app){
     app.post('/doVerify', authVerifyController.doVerify);
     app.get('/verifyEdit', authVerifyEdiController.verify);
     app.post('/verifyDoEdit', authVerifyEdiController.doVerify);
-    
+    app.get('/terms', authTermsController.index);
     /**
      * professor role
      */
