@@ -12,17 +12,11 @@ The Dunamis Music Center E-commerce and Music Subject Enrollment System offer th
 
 - **Music Subject Enrollment**: Streamlines the enrollment process for individuals interested in registering for music subjects offered by Dunamis Music Center, providing easy access to course information and enrollment options.
 
-- **Inventory Management**: This feature enables the administration to manage all the users offered by the school.
-
 - **User Management**: Facilitates the management of user accounts and roles within Dunamis Music Center, including professors, administrators, and students.
 
 - **Product Management**: Provides tools for comprehensive management of music-related products, including categorization, pricing, and promotion.
 
 - **Order Management**: Facilitates order processing and tracking to enhance operational efficiency and customer satisfaction.
-
-- **Enrollment Management**: This feature allows for the effective management of all the enrollments taught in the school.
-
-- **Professor Management**: This feature allows for the effective management of all the professors taught in the school.
 
 ## Database
 
