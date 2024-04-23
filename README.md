@@ -32,7 +32,7 @@ The system uses MongoDB as its database. MongoDB is a source-available cross-pla
 
 ### Setting up the classic way
 - make sure you have mongodb installed and started
-- create a .env.example file
+- create a .env file
 - copy contents from .env.example to .env then adjust the contents accordingly.
 - execute `npm install` in the command line to install the dependencies needed for the school appointment program.
 - execute `npm start` in the command line to start the program.
