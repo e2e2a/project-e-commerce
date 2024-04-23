@@ -38,6 +38,6 @@ The system uses MongoDB as its database. MongoDB is a source-available cross-pla
 - execute `npm start` in the command line to start the program.
 
 ### Setting up with Docker
-- create a .env.example file
+- create a .env file
 - copy contents from .env.example to .env then adjust the contents accordingly.
 - execute `docker-compose up` to start the program.
