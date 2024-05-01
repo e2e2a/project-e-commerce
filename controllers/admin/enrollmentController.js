@@ -277,7 +277,7 @@ module.exports.statusApprovedActions = async (req, res) => {
             'Enrollment Approved',
             emailContent
         );
-        const qrCodeURL = `https://dunamismusiccenter.onrender.com/enroll?qrcode=${userEnrollment._id}`;
+        const qrCodeURL = `https://dunamismusiccenter.onrender.com/enrollqrcode/${userEnrollment._id}`;
 
         const qrBuffer = qr.imageSync(qrCodeURL, { type: 'png' });
 
