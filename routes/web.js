@@ -58,6 +58,10 @@ module.exports = function(app){
     app.get('/courses', userCourseController.index);
     app.get('/course/enroll/:courseId', userCourseController.enroll);
     app.post('/course/doEnroll', userCourseController.doEnroll);
+    app.get('/enroll/qrcode', userCourseController.enrollQrcode);
+    app.get('/enrollqrcode/:enrollmentId', userCourseController.enrollQrcodeScan);
+    app.get('/enrolling/:enrollmentId', userCourseController.enrollWithQrcode);
+    app.post('/enrolling/:enrollmentId', userCourseController.doEnrollWithQrcode);
     //add-to-cart
     app.get('/carts', userCartController.cart);
     app.post('/cart', userCartController.addCart);

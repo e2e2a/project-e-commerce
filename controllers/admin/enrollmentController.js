@@ -3,6 +3,10 @@ const User = require('../../models/user');
 const Enrollement = require('../../models/enrollment');
 const Course = require('../../models/course');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
+const qr = require('qr-image');
+const path = require('path');
+const mongoose = require('mongoose');
 
 module.exports.index = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
@@ -99,17 +103,17 @@ module.exports.actions = async (req, res) => {
     const enrollementId = req.body.enrollementId;
     if (actions === 'approved') {
         const professorId = req.body.professorId;
-        if(!professorId){
+        if (!professorId) {
             req.flash('message', 'Please provide a professor!');
             return res.redirect('/admin/enrollment');
         }
-        const professor = await User.findOne({ _id: professorId, role: 'professor'})
-        if(!professor){
+        const professor = await User.findOne({ _id: professorId, role: 'professor' })
+        if (!professor) {
             req.flash('message', 'Please provide a professor!');
             return res.redirect('/admin/enrollment');
         }
 
-        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { professorId: professor._id,isApproved: true, dateApproved: formattedDate, status: 'approved' }, { new: true }).populate('userId');
+        const userEnrollment = await Enrollement.findByIdAndUpdate(enrollementId, { professorId: professor._id, isApproved: true, dateApproved: formattedDate, status: 'approved' }, { new: true }).populate('userId');
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -273,7 +277,25 @@ module.exports.statusApprovedActions = async (req, res) => {
             'Enrollment Approved',
             emailContent
         );
+        const qrCodeURL = `https://dunamismusiccenter.onrender.com/enroll?qrcode=${userEnrollment._id}`;
+
+        const qrBuffer = qr.imageSync(qrCodeURL, { type: 'png' });
+
+        const qrCodeDirectory = path.join(__dirname, '../../public/uploads/qrcode');
+
+        if (!fs.existsSync(qrCodeDirectory)) {
+            fs.mkdirSync(qrCodeDirectory, { recursive: true });
+        }
+
+        // Define the relative file path for saving the QR code image
+        const relativeQrCodeFilePath = path.join('/uploads/qrcode', `${userEnrollment._id}.png`);
+
+        const qrCodeFilePath = path.join(qrCodeDirectory, `${userEnrollment._id}.png`);
+
+        fs.writeFileSync(qrCodeFilePath, qrBuffer);
+
         if (userEnrollment) {
+            await Enrollement.findByIdAndUpdate(enrollementId, { qrDataURL: relativeQrCodeFilePath }, { new: true });
             console.log('Success enrollment approved');
             req.flash('message', 'Enrollment approved successfully!');
             return res.redirect('/admin/enrollment');
@@ -373,7 +395,7 @@ module.exports.statusDone = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
     if (userLogin) {
         if (userLogin.role === 'admin') {
-            const enrollements = await Enrollement.find();
+            const enrollements = await Enrollement.find().populate('professorId');
             res.render('admin/enrollmentDone', {
                 site_title: SITE_TITLE,
                 title: 'Enrollment',
@@ -411,6 +433,12 @@ module.exports.edit = async (req, res) => {
         if (userLogin.role === 'admin') {
             try {
                 const enrollmentId = req.params.enrollmentId
+                if (!mongoose.Types.ObjectId.isValid(enrollmentId)) {
+                    console.log('Invalid enrollmentId:', enrollmentId);
+                    return res.status(404).render('404', { userLogin: {
+                        role:'admin',
+                    } });
+                }
                 const enrollment = await Enrollement.findById(enrollmentId).populate('professorId')
                 res.render('admin/enrollmentEdit', {
                     site_title: SITE_TITLE,
@@ -435,6 +463,12 @@ module.exports.edit = async (req, res) => {
 
 module.exports.doEdit = async (req, res) => {
     const enrollmentId = req.params.enrollmentId
+    if (!mongoose.Types.ObjectId.isValid(enrollmentId)) {
+        console.log('Invalid enrollmentId:', enrollmentId);
+        return res.status(404).render('404', { userLogin: {
+            role:'admin',
+        } });
+    }
     const enrollment = await Enrollement.findById(enrollmentId)
     if (enrollment) {
         const titleChecking = await Course.findOne({ title: req.body.courseTitle })

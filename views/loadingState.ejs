@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .loading {
+            text-align: center;
+        }
+        .loading h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        .loading p {
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <h1>Loading...</h1>
+        <p>Please wait while we redirect you to the next page.</p>
+    </div>
+
+    <script>
+        const enrollmentId = '<%= enrollment._id %>'; // Accessing enrollment ID from the enrollment object
+        setTimeout(function() {
+            window.location.href = `/enrolling/${enrollmentId}`;
+        }, 5000);
+    </script>
+</body>
+</html>

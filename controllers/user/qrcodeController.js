@@ -2,7 +2,7 @@ const Cart = require('../../models/cart');
 const User = require('../../models/user');
 const SITE_TITLE = 'Dunamis';
 const Product = require('../../models/product');
-const qr = require('qrcode'); // Importing the qrcode library
+const qr = require('qrcode'); 
 const Order = require('../../models/order');
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
@@ -118,9 +118,6 @@ module.exports.checkout = async (req, res) => {
             emailContent
         );
         req.flash('message', 'Order Checkout. Please check your email');
-        /**
-         * @todo make a template success for gcash payment method
-         */
         req.session.login = user._id;
 
         const userLogin = await User.findById(user._id);

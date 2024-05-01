@@ -69,6 +69,9 @@ var schema = mongoose.Schema({
     status: {
         type: String,
     },
+    qrDataURL:{
+        type: String,
+    }
 }, {
     versionKey: false,
     timestamps: true

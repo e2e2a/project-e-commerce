@@ -25,27 +25,39 @@
     <div class="row justify-content-center">
       <div class="col-lg-12">
         <div class="main_title">
-          <h2><span>Courses</span></h2>
+          <h2><span>Enrollment</span></h2>
           <p>Bring called seed first of third give itself now ment</p>
         </div>
       </div>
     </div>
 
     <div class="row">
-      
+      <div class="col-lg-12 mb-5">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body card-block">
+                    <p><span class="text-warning">Note:</span> Update the <span>Course, Time and Schedule</span> before submitting.</p>
+                </div>
+            </div>
+        </div>
+      </div>
       <div class="col-lg-12">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body card-block">
-                    <form action="/course/doEnroll" method="post">
-                      <input type="hidden" name="courseId" value="<%= course._id %>">
-                        <div class="form-group">
-                            <label for="name" class=" form-control-label">FullName</label>
-                            <input type="text" id="name" name="name" placeholder="Enter FullName" class="form-control" autocomplete="off" value="<%= userLogin.fullname %>" required/>
+                    <form action="" method="post">
+                        <div class="form-group" >
+                            <label for="courseId" class=" form-control-label">Courses</label>
+                            <select name="courseId" id="courseId" class="form-select border border-success" required>
+                              <option value="">Select Course</option>
+                              <% courses.forEach(course => { %>
+                                <option value="<%= course._id %>"><%= course.title %></option>
+                              <% }); %>
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label for="email" class=" form-control-label">Email</label>
-                            <input type="email" id="email" name="email" placeholder="Enter FullName" class="form-control" autocomplete="off" value="<%= userLogin.email %>" required disabled/>
+                        <div class="form-group mt-5">
+                            <label for="name" class=" form-control-label">FullName</label>
+                            <input type="text" id="name" name="name" placeholder="Enter FullName" class="form-control text-capitalize" autocomplete="off" value="<%= userLogin.fullname %>" required/>
                         </div>
                         <div class="form-group">
                             <label for="address" class=" form-control-label">Address</label>
@@ -57,27 +69,26 @@
                         </div>
                         <div class="form-group">
                             <label for="gender" class="form-control-label">Gender</label>
-                            <input type="text" id="gender" name="gender" placeholder="Gender" class="form-control" autocomplete="off" required/>
+                            <input type="text" id="gender" name="gender" placeholder="Gender" class="form-control" autocomplete="off" value="<%= userEnrollment.gender %>" required/>
                         </div>
                         <div class="form-group">
                             <label for="contact" class=" form-control-label">Phone Number</label>
-                            <input type="text" id="contact" name="contact" pattern="(\+639\d{2}-\d{3}-\d{4}|\+639\d{9}|09\d{2}-\d{3}-\d{4}|09\d{9})" placeholder="Enter Phone Number" class="form-control" autocomplete="off" required/>
+                            <input type="text" id="contact" name="contact" pattern="(\+639\d{2}-\d{3}-\d{4}|\+639\d{9}|09\d{2}-\d{3}-\d{4}|09\d{9})" placeholder="Enter Phone Number" value="<%= userEnrollment.contact %>" class="form-control" autocomplete="off" required/>
                         </div>
                         <div class="form-group">
                             <label for="fatherName" class="form-control-label">Father's Name</label>
-                            <input type="text" id="fatherName" name="fatherName" placeholder="Enter Father's Name" class="form-control" autocomplete="off" required/>
+                            <input type="text" id="fatherName" name="fatherName" placeholder="Enter Father's Name" class="form-control" value="<%= userEnrollment.fatherName %>" autocomplete="off" required/>
                         </div>
                         <div class="form-group">
                             <label for="motherName" class="form-control-label">Mother's Name</label>
-                            <input type="text" id="motherName" name="motherName" placeholder="Enter Mother's Name" class="form-control" autocomplete="off" required/>
+                            <input type="text" id="motherName" name="motherName" placeholder="Enter Mother's Name" class="form-control" value="<%= userEnrollment.motherName %>" autocomplete="off" required/>
                         </div>
                         <div class="form-group flex-column">
                             <label for="level" class="form-control-label">Level Experience</label>
                             <select name="level" id="level" class="form-control">
-                                <option value="" selected hidden>Please select</option>
-                                <option value="Beginner">Beginner</option>
-                                <option value="Intermediate">Intermediate</option>
-                                <option value="Pro">Pro</option>
+                                <option value="Beginner" <% if(userEnrollment.level === 'Beginner') { %> selected <% } %>>Beginner</option>
+                                <option value="Intermediate" <% if(userEnrollment.level === 'Intermediate') { %> selected <% } %>>Intermediate</option>
+                                <option value="Pro" <% if(userEnrollment.level === 'Pro') { %> selected <% } %>>Pro</option>
                             </select>
                         </div>
                         <div class="form-group flex-column">

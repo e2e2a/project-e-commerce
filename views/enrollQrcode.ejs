@@ -1,0 +1,67 @@
+<%- include('./partials/header/header.ejs'); %>
+
+  <body>
+    <%- include('./partials/navigation/nav.ejs'); %>
+<style>
+    .flex-column {
+    display: flex;
+    flex-direction: column;
+}
+</style>
+    <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div class="banner_content d-md-flex justify-content-between align-items-center">
+            
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+<!--================ Start Courses Area =================-->
+<section class="blog-area section-gap mt-40">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12"> 
+        <div class="main_title">
+          <h2><span>Qr Code for enrollment</span></h2>
+          <p>Bring called seed first of third give itself now ment</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      
+      <div class="col-lg-12">
+        <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body card-block">
+                  <% if (userEnrollment) { %>
+                    <% if (userEnrollment.qrDataURL) {%>
+                    <form action="" method="post">
+                        <!-- Add a download link for the QR code image -->
+                      <div class="form-group">
+                          <a href="/public/<%= userEnrollment.qrDataURL %>" download="qr_code.png" class="btn btn-primary">Download QR Code</a>
+                      </div>
+                    </form>
+                    <% } else{ %>
+                      <p class="text-center">Waiting to complete your course enrolled.</p>
+                    <% } %>
+                  <% }else{ %>
+                    <p class="text-center">Qr Code can only be download once you are already enrolled 1 or more courses.</p>
+                  <% } %>
+                </div>
+            </div>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+</section>
+<!--================ End Courses Area =================-->
+
+    <%- include('./partials/footer/footer.ejs'); %>
+
+  </body>
+<%- include('./partials/footer/footer_js.ejs'); %>

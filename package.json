@@ -25,6 +25,7 @@
     "nanoid": "^3.1.15",
     "nodemailer": "^6.9.12",
     "nodemon": "^3.1.0",
+    "qr-image": "^3.2.0",
     "qrcode": "^1.5.3"
   }
 }
