@@ -7,7 +7,7 @@ module.exports.index = async (req, res) => {
     const userLogin = await User.findById(req.session.login);
     if (userLogin) {
         if (userLogin.role === 'professor') {
-            const studentClass = await Enrollment.find({ professorId: userLogin._id }).populate('userId')
+            const studentClass = await Enrollment.find({ professorId: userLogin._id, status: 'approved' }).populate('userId')
             res.render('professor/class', {
                 site_title: SITE_TITLE,
                 title: 'Classes',

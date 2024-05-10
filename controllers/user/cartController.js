@@ -175,6 +175,10 @@ module.exports.checkout = async (req, res) => {
             if (!userLogin) {
                 return res.redirect('/login')
             }
+            if(!cart || !cart.length > 0){
+                return res.redirect('/')
+            }
+
             const url = `https://dunamismusiccenter.onrender.com/qrcode/checkout?id=${userLogin._id}`;
             qr.toDataURL(url, (err, qrDataURL) => {
                 if (err) {
