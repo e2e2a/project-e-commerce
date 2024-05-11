@@ -175,7 +175,7 @@ module.exports.checkout = async (req, res) => {
             if (!userLogin) {
                 return res.redirect('/login')
             }
-            if(!cart || !cart.length > 0){
+            if(!cart || !cart.items.length > 0){
                 return res.redirect('/')
             }
 
