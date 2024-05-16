@@ -48,7 +48,7 @@
                 </ul>
               </div>
               <div class="col-lg-4 pr-0">
-                <ul class="nav navbar-nav navbar-right right_nav pull-right">
+                <ul class="nav navbar-nav navbar-right right_nav pull-right ">
                   <!-- <li class="nav-item">
                     <a href="#" class="icons">
                       <i class="ti-search" aria-hidden="true"></i>
@@ -65,19 +65,26 @@
                       <% } %>
                       </a>
                     </li>
+                    <style>
+                      /* Custom CSS for hover functionality */
+                      .dropdown:hover .dropdown-menu {
+                          z-index: 1050;
+                          position:static;
+                      }
+                  </style>
                     <form action="/logout" method="post">
-                      <li class="nav-item submenu dropdown">
-                        <a href="#" class="icons">
+                      <li class="submenu dropdown">
+                        <a class="icons dropdown-toggle" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="ti-user" aria-hidden="true"></i>
                         </a>
-                        <ul class="dropdown-menu">
-                          <li class="nav-item">
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                          <li class="dropdown-item">
                             <a class="nav-link" href="/profile">Profile</a>
                           </li>
-                          <li class="nav-item">
+                          <li class="dropdown-item">
                             <a class="nav-link" href="/enroll/qrcode">Enroll By Qrcode</a>
                           </li>
-                          <li class="nav-item">
+                          <li class="dropdown-item">
                             <button type="submit" class="btn btn-link nav-link w-100 text-left" >Logout</button>
                           </li>
                         </ul>

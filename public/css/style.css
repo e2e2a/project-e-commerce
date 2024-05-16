@@ -486,18 +486,24 @@ ul {
 }
 
 .home_banner_area {
-    background: url(../img/example.jpg) no-repeat center bottom;
     background-size: cover;
     position: relative;
     z-index: 1;
     min-height: 790px
 }
 
-/* @media (max-width: 767px) {
-    .home_banner_area {
-        background-position: initial
+.home_banner_area img {
+    background: bottom;
+    background-position: no-repeat;
+    width: 100%;
+    height: auto;
+    position: absolute;
+}
+@media(max-width: 590px) {
+    .home_banner_area img {
+        min-height: 500px
     }
-} */
+}
 
 .home_banner_area .banner_inner {
     position: relative;
@@ -600,23 +606,42 @@ ul {
 }
 
 .banner_area {
+    background-size: cover;
     position: relative;
     z-index: 1;
     min-height: 200px
 }
+.banner_area img {
+    background-position: no-repeat;
+    width: 100%;
+    height: auto;
+    position: absolute;
+}
+
+@media screen and (max-width: 600px) {
+    .banner_area img {
+        min-height: 400px
+    }
+}
+
+
 
 .banner_area .banner_inner {
-    position: relative;
-    overflow: hidden;
     width: 100%;
-    min-height: 350px;
-    background: url('../img/example.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position-y: 1%;
+    min-height: 400px;
     z-index: 1
 }
 
+@media screen and (min-width: 800px) {
+    .banner_area .banner_inner {
+        min-height: 650px
+    }
+}
+@media screen and (min-width: 1400px) {
+    .banner_area .banner_inner {
+        min-height: 750px
+    }
+}
 .banner_area .banner_inner .banner_content {
     position: relative;
     z-index: 10
@@ -3568,6 +3593,7 @@ h6 {
     color: #fff;
     background: #FFD700
 }
+
 .single-product .product-img .p_icon button {
     display: inline-block;
     height: 36px;
